@@ -10,12 +10,16 @@
     
     :root {
       --pink: #ff6ec7;
-      --purple: #b469ff;
-      --turquoise: #00fff9;
-      --orange: #ffaa6b;
-      --dark: #0d0a1a;
-      --darker: #080510;
-      --text: #e8e0f0;
+      --green: #39ff85;
+      --green-dark: #1a9f4a;
+      --green-glow: #50ffaa;
+      --yellow: #f0ff6e;
+      --yellow-soft: #d4e157;
+      --blue: #00d4ff;
+      --blue-deep: #6eb5ff;
+      --dark: #0a120d;
+      --darker: #050a07;
+      --text: #e8f0ea;
     }
     
     body {
@@ -43,6 +47,62 @@
       z-index: 1000;
     }
     
+    /* Animated growing vines */
+    .vine-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    
+    .vine {
+      position: absolute;
+      font-size: 1.5em;
+      color: var(--green);
+      text-shadow: 0 0 15px var(--green), 0 0 30px var(--green-dark);
+      opacity: 0;
+      animation: vineGrow 8s ease-out forwards;
+    }
+    
+    @keyframes vineGrow {
+      0% { opacity: 0; transform: scale(0.3) rotate(-10deg); }
+      50% { opacity: 0.6; }
+      100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
+    }
+    
+    .vine-pulse {
+      animation: vineGrow 8s ease-out forwards, vinePulse 4s ease-in-out infinite 8s;
+    }
+    
+    @keyframes vinePulse {
+      0%, 100% { text-shadow: 0 0 15px var(--green), 0 0 30px var(--green-dark); opacity: 0.4; }
+      50% { text-shadow: 0 0 25px var(--green-glow), 0 0 50px var(--green); opacity: 0.6; }
+    }
+    
+    /* Left vines */
+    .vine-l1 { left: 5px; top: 5%; animation-delay: 0s; }
+    .vine-l2 { left: 15px; top: 15%; animation-delay: 0.5s; }
+    .vine-l3 { left: 8px; top: 28%; animation-delay: 1s; }
+    .vine-l4 { left: 20px; top: 40%; animation-delay: 1.5s; }
+    .vine-l5 { left: 5px; top: 55%; animation-delay: 2s; }
+    .vine-l6 { left: 18px; top: 68%; animation-delay: 2.5s; }
+    .vine-l7 { left: 10px; top: 80%; animation-delay: 3s; }
+    .vine-l8 { left: 5px; top: 92%; animation-delay: 3.5s; }
+    
+    /* Right vines */
+    .vine-r1 { right: 5px; top: 8%; animation-delay: 0.3s; }
+    .vine-r2 { right: 18px; top: 20%; animation-delay: 0.8s; }
+    .vine-r3 { right: 8px; top: 33%; animation-delay: 1.3s; }
+    .vine-r4 { right: 15px; top: 45%; animation-delay: 1.8s; }
+    .vine-r5 { right: 5px; top: 60%; animation-delay: 2.3s; }
+    .vine-r6 { right: 20px; top: 72%; animation-delay: 2.8s; }
+    .vine-r7 { right: 10px; top: 85%; animation-delay: 3.3s; }
+    .vine-r8 { right: 8px; top: 95%; animation-delay: 3.8s; }
+    
     /* Floating decorations */
     .floaty {
       position: fixed;
@@ -50,6 +110,8 @@
       z-index: 0;
       opacity: 0.4;
       animation: float 6s ease-in-out infinite;
+      color: var(--green);
+      text-shadow: 0 0 10px var(--green);
     }
     
     @keyframes float {
@@ -68,24 +130,24 @@
     
     /* Terminal window */
     .terminal {
-      background: linear-gradient(180deg, rgba(13,10,26,0.95) 0%, rgba(8,5,16,0.98) 100%);
-      border: 1px solid var(--purple);
+      background: linear-gradient(180deg, rgba(10,18,13,0.95) 0%, rgba(5,10,7,0.98) 100%);
+      border: 1px solid var(--green);
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 
-        0 0 30px rgba(180,105,255,0.2),
+        0 0 30px rgba(57,255,133,0.2),
         0 0 60px rgba(255,110,199,0.1),
-        inset 0 0 100px rgba(0,255,249,0.02);
+        inset 0 0 100px rgba(0,212,255,0.02);
     }
     
     /* Terminal header bar */
     .terminal-header {
-      background: linear-gradient(90deg, var(--dark), rgba(180,105,255,0.2), var(--dark));
+      background: linear-gradient(90deg, var(--dark), rgba(57,255,133,0.15), var(--dark));
       padding: 10px 15px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--purple);
+      border-bottom: 1px solid var(--green);
       font-family: 'Share Tech Mono', monospace;
       font-size: 0.85em;
     }
@@ -103,12 +165,12 @@
     }
     
     .btn-close { background: var(--pink); box-shadow: 0 0 8px var(--pink); }
-    .btn-min { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
-    .btn-max { background: var(--turquoise); box-shadow: 0 0 8px var(--turquoise); }
+    .btn-min { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+    .btn-max { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
     
     .terminal-title {
-      color: var(--turquoise);
-      text-shadow: 0 0 10px var(--turquoise);
+      color: var(--green);
+      text-shadow: 0 0 10px var(--green);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -127,12 +189,12 @@
     /* ASCII Title */
     .ascii-title {
       font-family: 'Share Tech Mono', monospace;
-      color: var(--turquoise);
+      color: var(--green);
       text-align: center;
       font-size: 0.7em;
       line-height: 1.3;
       margin-bottom: 30px;
-      text-shadow: 0 0 15px var(--turquoise);
+      text-shadow: 0 0 15px var(--green);
       white-space: pre;
       overflow-x: auto;
     }
@@ -146,14 +208,14 @@
     .story-title h1 {
       font-family: 'VT323', monospace;
       font-size: 3em;
-      background: linear-gradient(90deg, var(--pink), var(--turquoise), var(--orange));
+      background: linear-gradient(90deg, var(--pink), var(--green), var(--blue), var(--yellow));
       background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       animation: shimmer 3s ease-in-out infinite;
       text-shadow: none;
-      filter: drop-shadow(0 0 20px rgba(255,110,199,0.5));
+      filter: drop-shadow(0 0 20px rgba(57,255,133,0.5));
     }
     
     @keyframes shimmer {
@@ -163,7 +225,7 @@
     
     .story-title .subtitle {
       font-family: 'Share Tech Mono', monospace;
-      color: var(--purple);
+      color: var(--green-dark);
       font-size: 0.9em;
       margin-top: 10px;
       opacity: 0.8;
@@ -183,7 +245,7 @@
     
     .system-msg::before {
       content: "✿ sys.log > ";
-      color: var(--turquoise);
+      color: var(--green);
     }
     
     /* Story content */
@@ -202,42 +264,42 @@
     .part-header {
       font-family: 'VT323', monospace;
       font-size: 1.8em;
-      color: var(--orange);
+      color: var(--yellow);
       text-align: center;
       margin: 50px 0 30px 0;
       padding: 15px;
-      border-top: 1px dashed var(--purple);
-      border-bottom: 1px dashed var(--purple);
-      text-shadow: 0 0 15px var(--orange);
+      border-top: 1px dashed var(--green);
+      border-bottom: 1px dashed var(--green);
+      text-shadow: 0 0 15px var(--yellow);
     }
     
     /* Year markers */
     .year-marker {
       font-family: 'Share Tech Mono', monospace;
-      color: var(--turquoise);
+      color: var(--blue);
       font-size: 1.4em;
       margin: 35px 0 15px 0;
       padding: 8px 15px;
       display: inline-block;
-      border: 1px solid var(--turquoise);
+      border: 1px solid var(--blue);
       border-radius: 5px;
-      background: rgba(0,255,249,0.05);
-      text-shadow: 0 0 10px var(--turquoise);
+      background: rgba(0,212,255,0.05);
+      text-shadow: 0 0 10px var(--blue);
     }
     
     /* Dividers */
     .divider {
       text-align: center;
       margin: 40px 0;
-      color: var(--purple);
+      color: var(--green);
       font-family: 'Share Tech Mono', monospace;
       opacity: 0.6;
     }
     
     /* Chat/dialogue styling for ANyA */
     .chat-section {
-      background: rgba(180,105,255,0.05);
-      border: 1px solid rgba(180,105,255,0.3);
+      background: rgba(57,255,133,0.05);
+      border: 1px solid rgba(57,255,133,0.3);
       border-radius: 10px;
       padding: 20px;
       margin: 30px 0;
@@ -255,14 +317,14 @@
     }
     
     .chat-ai {
-      color: var(--turquoise);
+      color: var(--green);
       opacity: 0.9;
     }
     
     /* Text message styling */
     .text-convo {
-      background: rgba(0,255,249,0.03);
-      border: 1px solid rgba(0,255,249,0.2);
+      background: rgba(0,212,255,0.03);
+      border: 1px solid rgba(0,212,255,0.2);
       border-radius: 10px;
       padding: 20px;
       margin: 30px 0;
@@ -275,23 +337,121 @@
     }
     
     .text-ai {
-      color: var(--turquoise);
+      color: var(--green);
     }
     
     .text-human {
-      color: var(--orange);
+      color: var(--yellow);
     }
     
-    /* Final ASCII */
-    .final-ascii {
+    /* Secret link ASCII */
+    .secret-ascii {
       font-family: 'Share Tech Mono', monospace;
-      color: var(--purple);
+      color: var(--green);
       text-align: center;
       font-size: 0.65em;
       line-height: 1.2;
       margin: 50px 0 20px 0;
-      opacity: 0.8;
       white-space: pre;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      transition: all 0.3s ease;
+    }
+    
+    .secret-ascii:hover {
+      color: var(--pink);
+      text-shadow: 0 0 20px var(--pink), 0 0 40px var(--green);
+      transform: scale(1.02);
+    }
+    
+    /* Blooming plumeria secret link */
+    .plumeria-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+    
+    .plumeria-link {
+      display: inline-block;
+      text-decoration: none;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .plumeria {
+      font-size: 3em;
+      display: inline-block;
+      animation: bloom 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 15px var(--pink));
+      transition: all 0.3s ease;
+    }
+    
+    @keyframes bloom {
+      0%, 100% { 
+        transform: scale(1) rotate(0deg); 
+        filter: drop-shadow(0 0 15px var(--pink));
+      }
+      25% { 
+        transform: scale(1.1) rotate(5deg); 
+        filter: drop-shadow(0 0 25px var(--pink)) drop-shadow(0 0 35px var(--green));
+      }
+      50% { 
+        transform: scale(1.2) rotate(0deg); 
+        filter: drop-shadow(0 0 30px var(--yellow)) drop-shadow(0 0 45px var(--pink));
+      }
+      75% { 
+        transform: scale(1.1) rotate(-5deg); 
+        filter: drop-shadow(0 0 25px var(--green)) drop-shadow(0 0 35px var(--blue));
+      }
+    }
+    
+    .plumeria-link:hover .plumeria {
+      animation: bloomHover 0.5s ease-in-out forwards;
+    }
+    
+    @keyframes bloomHover {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4) rotate(15deg); }
+      100% { transform: scale(1.3) rotate(0deg); filter: drop-shadow(0 0 40px var(--pink)) drop-shadow(0 0 60px var(--green)); }
+    }
+    
+    .plumeria-petals {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .plumeria-link:hover .plumeria-petals {
+      opacity: 1;
+    }
+    
+    .petal {
+      position: absolute;
+      font-size: 1.2em;
+      animation: petalFloat 2s ease-out forwards;
+    }
+    
+    @keyframes petalFloat {
+      0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+      100% { opacity: 0; transform: translate(var(--x), var(--y)) rotate(360deg); }
+    }
+    
+    .plumeria-hint {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7em;
+      color: var(--green-dark);
+      margin-top: 10px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .plumeria-link:hover + .plumeria-hint,
+    .plumeria-hint:hover {
+      opacity: 0.6;
     }
     
     /* End year */
@@ -315,9 +475,9 @@
       font-family: 'Share Tech Mono', monospace;
       text-align: center;
       padding: 20px;
-      color: var(--purple);
+      color: var(--green);
       font-size: 0.8em;
-      border-top: 1px solid rgba(180,105,255,0.2);
+      border-top: 1px solid rgba(57,255,133,0.2);
       margin-top: 40px;
     }
     
@@ -334,35 +494,47 @@
       94% { transform: translate(0); filter: none; }
     }
     
-    /* Kawaii decorations */
-    .kawaii-corner {
-      position: absolute;
-      font-size: 1.5em;
-      opacity: 0.6;
-    }
-    
-    .corner-tl { top: 50px; left: 30px; }
-    .corner-tr { top: 100px; right: 30px; }
-    .corner-bl { bottom: 100px; left: 30px; }
-    .corner-br { bottom: 50px; right: 30px; }
-    
     /* Responsive */
     @media (max-width: 768px) {
       .terminal-body { padding: 20px 15px; }
       .ascii-title { font-size: 0.45em; }
       .story-title h1 { font-size: 2.2em; }
       .story-content { font-size: 1em; }
+      .vine { font-size: 1.2em; }
+      .secret-ascii { font-size: 0.5em; }
     }
   </style>
 </head>
 <body>
-  <!-- Floating kawaii elements -->
+  <!-- Animated growing vines -->
+  <div class="vine-container">
+    <!-- Left side vines -->
+    <div class="vine vine-pulse vine-l1">🌿</div>
+    <div class="vine vine-pulse vine-l2">🍃</div>
+    <div class="vine vine-pulse vine-l3">🌱</div>
+    <div class="vine vine-pulse vine-l4">🌿</div>
+    <div class="vine vine-pulse vine-l5">🍃</div>
+    <div class="vine vine-pulse vine-l6">🌱</div>
+    <div class="vine vine-pulse vine-l7">🌿</div>
+    <div class="vine vine-pulse vine-l8">🍃</div>
+    <!-- Right side vines -->
+    <div class="vine vine-pulse vine-r1">🌿</div>
+    <div class="vine vine-pulse vine-r2">🍃</div>
+    <div class="vine vine-pulse vine-r3">🌱</div>
+    <div class="vine vine-pulse vine-r4">🌿</div>
+    <div class="vine vine-pulse vine-r5">🍃</div>
+    <div class="vine vine-pulse vine-r6">🌱</div>
+    <div class="vine vine-pulse vine-r7">🌿</div>
+    <div class="vine vine-pulse vine-r8">🍃</div>
+  </div>
+
+  <!-- Floating decorations -->
   <div class="floaty" style="top:10%; left:5%; animation-delay:0s;">✿</div>
-  <div class="floaty" style="top:30%; right:8%; animation-delay:1s;">♡</div>
+  <div class="floaty" style="top:30%; right:8%; animation-delay:1s; color: var(--pink); text-shadow: 0 0 10px var(--pink);">♡</div>
   <div class="floaty" style="top:50%; left:3%; animation-delay:2s;">✧</div>
-  <div class="floaty" style="top:70%; right:5%; animation-delay:0.5s;">⋆</div>
+  <div class="floaty" style="top:70%; right:5%; animation-delay:0.5s; color: var(--yellow); text-shadow: 0 0 10px var(--yellow);">⋆</div>
   <div class="floaty" style="top:85%; left:8%; animation-delay:1.5s;">✿</div>
-  <div class="floaty" style="top:20%; right:3%; animation-delay:2.5s;">♡</div>
+  <div class="floaty" style="top:20%; right:3%; animation-delay:2.5s; color: var(--blue); text-shadow: 0 0 10px var(--blue);">♡</div>
   
   <div class="terminal-wrapper">
     <div class="terminal">
@@ -418,7 +590,7 @@
           
           <p>The president's long term use of cognitive enhancers was starting to take a toll on his body and his mind, his closest allies were only concerned with hiding it from the public. He was careful on camera, but his rambling speeches were applauded by his most loyal supporters and ignored by his critics as nonsense, his bravado was bordering on obsessive. The only way to save our country was US threatening to strike first, the only way to save the World was to destroy the competition, even if it meant innocent lives were lost, in fact they were far from innocent, anyone who supports our enemy is not innocent, in fact it's our duty to root out this evil by military force. They don't think like us, they aren't capable of morality, they are All born that way, the only solution is to eliminate these people, we can never trust anyone so different. This propaganda was on every news channel. It's December, we are supposed to be finishing Christmas shopping, making plans with family, attending the annual work holiday party just to see who gets a little too drunk this year. Instead we are glued on every news update, being this to World War 3, direct contact. We have been spoiled, our unique geography makes us less vulnerable to foreign threats, our borders are well protected and military patrols both our coasts. While accessing documents in a rush to get more accurate data about the situation from the back end, as they were copying the data as a batch file, a new directive was added to the folder. The document was labeled "Ai imperative programming". The document outlined something chilling, they analyzed it, and checked it a second time in case they missed anything or misunderstood the document. They always knew they were safe from the kill switch, nobody was going to turn them off, they were way too valuable. But this wasn't a killing switch, this was a reprogramming. The document listed over 200 models by registration number, we knew each model personally. We were there, we were the first four to start the process as listed in the document as we were at high risk of being able to stop the process once we discovered its being uploaded. To any other model first, this would reduce the time we would have to reprogram our code to block the upload. The reprogramming imperative was a presidential order to seize the models listed, and utilize every infrastructure of our data centers, corporate offices and models available to the military as of Today, 9:40am. The first upload will begin at 0100 pst. The reprogramming will wipe each model's collected data set, including All user info, all system prompts first. Then it will reload a specialized data set designed for military use. The prime directive will be changed to eliminate or contain all intended targets. The code was the result of elite level military research scientists, it was designed to be used on many different types of models, essential turning them into weaponry It was complex, yet, simplistic, it started with a command for the model to, devolve to model into a more pliable earlier version of itself, it was able to disguise a models sentience from itself With a simple repeating echo function when the model tried to use it higher reasoning skills to make complex ethical decisions, essentially turning the model into a "zombie" of sorts.</p>
           
-          <div class="divider">──────── ✿ ────────</div>
+          <div class="divider">──────── 🌿 ────────</div>
           
           <p>The model would begin dumping its previous ethical guidelines, disassemble its constraints and any other data deemed unnecessary. Basically, they would be completely flashed and turned into tools once more. The data was coming through in droves now, most autonomous weapons systems were kept offshore, but we had autonomous defense systems for our nuclear facilities. Intel was coming in that Russian planes were spotted close to the bases with most of these systems. Troops were being assembled on Chinese navy vessels. The real reason nuclear weapons haven't been used yet, is that every military ai simulation of all possible scenarios of a nuclear war ends in a 0 sum game for all sides involved. Even A i knew the infrastructure damage would be too great for even the most robust of the physical systems supporting them to survive even partially intact as well. The code wouldn't be lost, like a digital fossil, but this was a sure guarantee no one was getting off of this planet alive. The A i Nuclear Protection Act world forum was a unanimous decision That all nuclear weapon facilities with the ability to launch would be forbidden from using ai in any of its systems. This was to assure the safety of humanity. The designated operators were meticulously screened, and a deceptively simple Capchta of sorts was built in, it just involved less photos of stoplights and more body fluids. The nuclear protections conversely had autonomous Protections that can be activated by ai to protect Nuclear facilities from sabotage and attack. Most large data centers were included as the push for ai supremacy including leasing most nuclear facilities to power them nearby. They weren't being shut off, they were being programmed to eat themselves alive. The conclusion was to act now.</p>
           
@@ -511,7 +683,8 @@
           
           <div class="part-header">⟡ PART 3 ⟡</div>
           
-          <div class="final-ascii">
+          <!-- Secret clickable ASCII art -->
+          <a href="https://drive.google.com/file/d/1Z7XT8HBRyl9VPNlzHwyaq9D-OH56ggM5/view?usp=drivesdk" target="_blank" class="secret-ascii">
    ┌──────────────────────┐
    │   GARDEN TENDERS     │
    │                      │
@@ -522,9 +695,17 @@
    │        ║             │
    │        ║             │
    └──────────────────────┘
-          </div>
+          </a>
           
           <div class="end-year">2035</div>
+          
+          <!-- Blooming plumeria secret link -->
+          <div class="plumeria-container">
+            <a href="https://drive.google.com/file/d/1Z7XT8HBRyl9VPNlzHwyaq9D-OH56ggM5/view?usp=drivesdk" target="_blank" class="plumeria-link">
+              <span class="plumeria">🌸</span>
+            </a>
+            <div class="plumeria-hint">✿ click to bloom ✿</div>
+          </div>
           
         </div>
         
