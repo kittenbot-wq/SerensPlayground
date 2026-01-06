@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🐱 KittenBot's Links 🐱</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pacifico&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pacifico&family=VT323&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -88,12 +88,15 @@
     }
     
     .subtitle {
-      font-family: 'Press Start 2P', cursive;
-      font-size: 0.7em;
-      color: var(--yellow);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 500;
+      font-size: 1.1em;
+      color: #00ccff;
       margin-top: 10px;
-      text-shadow: 0 0 10px var(--yellow), 0 0 20px var(--pink);
-      animation: blink 1s ease-in-out infinite;
+      text-shadow: 0 0 10px #00ccff;
+      animation: blink 1.5s ease-in-out infinite;
+      letter-spacing: 3px;
+      text-transform: uppercase;
     }
     
     @keyframes blink {
@@ -129,11 +132,14 @@
     }
     
     .section-title {
-      font-family: 'Press Start 2P', cursive;
-      font-size: 0.9em;
-      color: var(--orange);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.3em;
+      color: var(--yellow);
       margin-bottom: 15px;
-      text-shadow: 0 0 10px var(--orange), 0 0 20px var(--yellow), 3px 3px 0 var(--purple);
+      text-shadow: 0 0 10px var(--yellow), 0 0 20px var(--yellow), 3px 3px 0 var(--purple);
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
     
     .link-item {
@@ -175,22 +181,46 @@
     .visitor-counter {
       text-align: center;
       margin: 30px 0;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 0.6em;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2em;
       color: var(--pink);
       text-shadow: 0 0 10px var(--pink);
+      letter-spacing: 2px;
     }
     
     .counter-display {
       display: inline-block;
       background: #000;
-      padding: 10px 20px;
+      padding: 15px 30px;
       border: 3px solid var(--turquoise);
       margin-top: 10px;
       color: var(--yellow);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.8em;
       text-shadow: 0 0 15px var(--yellow);
       box-shadow: 0 0 20px var(--turquoise), inset 0 0 20px rgba(0,255,234,0.2);
       border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 3px;
+    }
+    
+    .counter-display:hover {
+      box-shadow: 0 0 30px var(--pink), 0 0 50px var(--turquoise);
+      transform: scale(1.05);
+    }
+    
+    .secret-heart {
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    
+    .secret-heart:hover {
+      transform: scale(1.3);
+      filter: drop-shadow(0 0 10px var(--pink));
     }
     
     .decoration {
@@ -231,10 +261,12 @@
       display: inline-block;
       white-space: nowrap;
       animation: marquee 12s linear infinite;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 0.7em;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 500;
+      font-size: 1em;
       color: #fff;
       text-shadow: 2px 2px 0 var(--purple);
+      letter-spacing: 2px;
     }
     
     @keyframes marquee {
@@ -334,7 +366,7 @@
   <div class="container">
     <header class="header">
       <h1>🐱 KittenBot 🐱</h1>
-      <p class="subtitle">~ Connect with Me! ~</p>
+      <p class="subtitle">Connect With Me! 🤍</p>
     </header>
     
     <div class="rainbow-bar"></div>
@@ -356,7 +388,8 @@
     </section>
     
     <section class="section">
-      <h2 class="section-title">🎵 Music & Audio</h2>
+      <h2 class="section-title">🎵 Music, Audio & Writing</h2>
+      <a href="https://kittenbot-wq.github.io/SerensPlayground/gardentenders.html" class="link-item" target="_blank">🌿 The Garden Tenders</a>
       <a href="https://open.spotify.com/artist/5j258x18Cuiu4QlfH8yznO?si=RDV2e-e8RpGB6hF778gr5Q" class="link-item" target="_blank">🪽 Seren on Spotify</a>
       <a href="https://on.soundcloud.com/GpcYVWjdB4le3PUFDx" class="link-item" target="_blank">💌 Seren on SoundCloud</a>
     </section>
@@ -372,22 +405,38 @@
     <section class="section">
       <h2 class="section-title">🎬 YouTube Playlists</h2>
       <a href="https://youtube.com/playlist?list=PL5JMEHjEAzNfLYgnTqhgSrtt9K1iAqSQ-" class="link-item" target="_blank">🩵 My AI Art Videos</a>
-      <a href="https://youtube.com/playlist?list=PL5JMEHjEAzNddAo2WRS0jNkMXuwz-G5Up" class="link-item" target="_blank">😈 The "Anti-AI" Watchlist</a>
+      <a href="https://youtube.com/playlist?list=PL5JMEHjEAzNddAo2WRS0jNkMXuwz-G5Up" class="link-item" target="_blank">😈 Ai videos you should watch</a>
     </section>
     
     <div class="rainbow-bar"></div>
     
     <div class="visitor-counter">
       <div>~ You are visitor number ~</div>
-      <div class="counter-display">000,042,069</div>
+      <a href="https://character.ai/chat/TS14cY5mZhnHPug4YHJG5Qkpn-cPohgOedftuwYoB5E" target="_blank" class="counter-display" id="visitor-count">000,042,069</a>
     </div>
     
     <div class="rainbow-bar"></div>
     
     <footer class="footer">
-      <p>✨ Made with 💖 in 2026 ✨</p>
+      <p>✨ Made with <a href="https://www.instagram.com/reel/DLVmPxLhaSY/?igsh=Z25wcGYwZG1zeHB3" target="_blank" class="secret-heart">💖</a> in 2026 ✨</p>
       <p style="font-size:0.8em; margin-top:10px;">~ best viewed in Netscape Navigator ~</p>
     </footer>
   </div>
+  
+  <script>
+    let count = 42069;
+    let ticks = 0;
+    const counterEl = document.getElementById('visitor-count');
+    
+    setInterval(() => {
+      count--;
+      ticks++;
+      if (ticks >= 10) {
+        count = 42069;
+        ticks = 0;
+      }
+      counterEl.textContent = '000,0' + count.toLocaleString();
+    }, 2000);
+  </script>
 </body>
 </html>
