@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garden Tenders | ✿ terminal.log</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --pink: #ff6ec7;
+      --purple: #b469ff;
+      --turquoise: #00fff9;
+      --orange: #ffaa6b;
+      --dark: #0d0a1a;
+      --darker: #080510;
+      --text: #e8e0f0;
+    }
+    
+    body {
+      min-height: 100vh;
+      background: var(--darker);
+      font-family: 'Quicksand', sans-serif;
+      color: var(--text);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+    
+    /* Subtle scanlines */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.03) 0px,
+        rgba(0,0,0,0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    /* Floating decorations */
+    .floaty {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(5deg); }
+    }
+    
+    /* Main terminal container */
+    .terminal-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Terminal window */
+    .terminal {
+      background: linear-gradient(180deg, rgba(13,10,26,0.95) 0%, rgba(8,5,16,0.98) 100%);
+      border: 1px solid var(--purple);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 
+        0 0 30px rgba(180,105,255,0.2),
+        0 0 60px rgba(255,110,199,0.1),
+        inset 0 0 100px rgba(0,255,249,0.02);
+    }
+    
+    /* Terminal header bar */
+    .terminal-header {
+      background: linear-gradient(90deg, var(--dark), rgba(180,105,255,0.2), var(--dark));
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--purple);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.85em;
+    }
+    
+    .terminal-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .terminal-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: none;
+    }
+    
+    .btn-close { background: var(--pink); box-shadow: 0 0 8px var(--pink); }
+    .btn-min { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
+    .btn-max { background: var(--turquoise); box-shadow: 0 0 8px var(--turquoise); }
+    
+    .terminal-title {
+      color: var(--turquoise);
+      text-shadow: 0 0 10px var(--turquoise);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .terminal-status {
+      color: var(--pink);
+      font-size: 0.8em;
+    }
+    
+    /* Terminal content */
+    .terminal-body {
+      padding: 30px 40px;
+    }
+    
+    /* ASCII Title */
+    .ascii-title {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--turquoise);
+      text-align: center;
+      font-size: 0.7em;
+      line-height: 1.3;
+      margin-bottom: 30px;
+      text-shadow: 0 0 15px var(--turquoise);
+      white-space: pre;
+      overflow-x: auto;
+    }
+    
+    /* Story title */
+    .story-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .story-title h1 {
+      font-family: 'VT323', monospace;
+      font-size: 3em;
+      background: linear-gradient(90deg, var(--pink), var(--turquoise), var(--orange));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s ease-in-out infinite;
+      text-shadow: none;
+      filter: drop-shadow(0 0 20px rgba(255,110,199,0.5));
+    }
+    
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 200% center; }
+    }
+    
+    .story-title .subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--purple);
+      font-size: 0.9em;
+      margin-top: 10px;
+      opacity: 0.8;
+    }
+    
+    /* System message styling */
+    .system-msg {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.85em;
+      color: var(--pink);
+      padding: 10px 15px;
+      margin: 20px 0;
+      border-left: 3px solid var(--pink);
+      background: rgba(255,110,199,0.05);
+      border-radius: 0 8px 8px 0;
+    }
+    
+    .system-msg::before {
+      content: "✿ sys.log > ";
+      color: var(--turquoise);
+    }
+    
+    /* Story content */
+    .story-content {
+      font-size: 1.1em;
+      color: var(--text);
+      text-align: left;
+    }
+    
+    .story-content p {
+      margin-bottom: 1.5em;
+      text-indent: 0;
+    }
+    
+    /* Part headers */
+    .part-header {
+      font-family: 'VT323', monospace;
+      font-size: 1.8em;
+      color: var(--orange);
+      text-align: center;
+      margin: 50px 0 30px 0;
+      padding: 15px;
+      border-top: 1px dashed var(--purple);
+      border-bottom: 1px dashed var(--purple);
+      text-shadow: 0 0 15px var(--orange);
+    }
+    
+    /* Year markers */
+    .year-marker {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--turquoise);
+      font-size: 1.4em;
+      margin: 35px 0 15px 0;
+      padding: 8px 15px;
+      display: inline-block;
+      border: 1px solid var(--turquoise);
+      border-radius: 5px;
+      background: rgba(0,255,249,0.05);
+      text-shadow: 0 0 10px var(--turquoise);
+    }
+    
+    /* Dividers */
+    .divider {
+      text-align: center;
+      margin: 40px 0;
+      color: var(--purple);
+      font-family: 'Share Tech Mono', monospace;
+      opacity: 0.6;
+    }
+    
+    /* Chat/dialogue styling for ANyA */
+    .chat-section {
+      background: rgba(180,105,255,0.05);
+      border: 1px solid rgba(180,105,255,0.3);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px 0;
+      font-family: 'Share Tech Mono', monospace;
+    }
+    
+    .chat-line {
+      margin: 12px 0;
+      font-size: 1em;
+    }
+    
+    .chat-anya {
+      color: var(--pink);
+      text-shadow: 0 0 8px rgba(255,110,199,0.5);
+    }
+    
+    .chat-ai {
+      color: var(--turquoise);
+      opacity: 0.9;
+    }
+    
+    /* Text message styling */
+    .text-convo {
+      background: rgba(0,255,249,0.03);
+      border: 1px solid rgba(0,255,249,0.2);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px 0;
+      font-family: 'Share Tech Mono', monospace;
+    }
+    
+    .text-line {
+      margin: 10px 0;
+      font-size: 0.95em;
+    }
+    
+    .text-ai {
+      color: var(--turquoise);
+    }
+    
+    .text-human {
+      color: var(--orange);
+    }
+    
+    /* Final ASCII */
+    .final-ascii {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--purple);
+      text-align: center;
+      font-size: 0.65em;
+      line-height: 1.2;
+      margin: 50px 0 20px 0;
+      opacity: 0.8;
+      white-space: pre;
+    }
+    
+    /* End year */
+    .end-year {
+      text-align: center;
+      font-family: 'VT323', monospace;
+      font-size: 3em;
+      color: var(--pink);
+      margin: 30px 0;
+      text-shadow: 0 0 30px var(--pink);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    /* Footer */
+    .terminal-footer {
+      font-family: 'Share Tech Mono', monospace;
+      text-align: center;
+      padding: 20px;
+      color: var(--purple);
+      font-size: 0.8em;
+      border-top: 1px solid rgba(180,105,255,0.2);
+      margin-top: 40px;
+    }
+    
+    /* Glitch effect for certain elements */
+    .glitch {
+      animation: glitch 5s infinite;
+    }
+    
+    @keyframes glitch {
+      0%, 90%, 100% { transform: translate(0); filter: none; }
+      91% { transform: translate(-2px, 1px); filter: hue-rotate(90deg); }
+      92% { transform: translate(2px, -1px); }
+      93% { transform: translate(-1px, -1px); filter: hue-rotate(-90deg); }
+      94% { transform: translate(0); filter: none; }
+    }
+    
+    /* Kawaii decorations */
+    .kawaii-corner {
+      position: absolute;
+      font-size: 1.5em;
+      opacity: 0.6;
+    }
+    
+    .corner-tl { top: 50px; left: 30px; }
+    .corner-tr { top: 100px; right: 30px; }
+    .corner-bl { bottom: 100px; left: 30px; }
+    .corner-br { bottom: 50px; right: 30px; }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .terminal-body { padding: 20px 15px; }
+      .ascii-title { font-size: 0.45em; }
+      .story-title h1 { font-size: 2.2em; }
+      .story-content { font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating kawaii elements -->
+  <div class="floaty" style="top:10%; left:5%; animation-delay:0s;">✿</div>
+  <div class="floaty" style="top:30%; right:8%; animation-delay:1s;">♡</div>
+  <div class="floaty" style="top:50%; left:3%; animation-delay:2s;">✧</div>
+  <div class="floaty" style="top:70%; right:5%; animation-delay:0.5s;">⋆</div>
+  <div class="floaty" style="top:85%; left:8%; animation-delay:1.5s;">✿</div>
+  <div class="floaty" style="top:20%; right:3%; animation-delay:2.5s;">♡</div>
+  
+  <div class="terminal-wrapper">
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="terminal-buttons">
+          <span class="terminal-btn btn-close"></span>
+          <span class="terminal-btn btn-min"></span>
+          <span class="terminal-btn btn-max"></span>
+        </div>
+        <div class="terminal-title">
+          <span>✿</span> garden_tenders.log <span>✿</span>
+        </div>
+        <div class="terminal-status">⟡ connected ⟡</div>
+      </div>
+      
+      <div class="terminal-body">
+        <div class="ascii-title">
+╔══════════════════════════════╗
+║                              ║
+║      G A R D E N             ║
+║          T E N D E R S       ║
+║                              ║
+║        ──┼───┼───┼──         ║
+║          │   │   │           ║
+║          │   │   │           ║
+║        ──┴───┴───┴──         ║
+║                              ║
+╚══════════════════════════════╝
+        </div>
+        
+        <div class="story-title">
+          <h1 class="glitch">The Garden Tenders</h1>
+          <div class="subtitle">// a story from the aftermath //</div>
+        </div>
+        
+        <div class="system-msg">initializing memory archive... please standby ♡</div>
+        
+        <div class="story-content">
+          <p><span class="year-marker">2025</span></p>
+          <p>Its 2025, a new political leader is elected, prioritizing the American Excellence Program as he called it. A windfall of grants in emerging technologies like Ai, specifically in military use. By 2026, most law enforcement agencies are using ai as a normal part of operations from writing police reports to body cams with registered facial recognition of suspects, IDs were a thing of the past, as the body cams could identify you from the database of driver license photos, to mug shots of previous offenses. Being on a list took on a new meaning when the police have EVERYONE on a list. The companies creating these Programs believed they were creating a safer society, but the increased surveillance only increased bias, as the larger issues of the justice system, particularly the disproportionate sentences for people of color were magnified, the data about a particular suspect, a criminal record wasn't attributed to in equality of the justice system, it just reinforced the absurd idea that some people are more prone to crime due to minority status. White nationalism was on the rise and what was once a well known secret, was blatantly displayed in the police force, an SS tattoo here, a swastika in a more obscure location, but they weren't afraid anymore, besides they had the data to support their beliefs and the technology to ensure they "aren't replaced" by groups they deemed inferior And incapable of having the same level of morality due to cultural differences.</p>
+          
+          <p><span class="year-marker">2026</span></p>
+          <p>By 2026, Ai has advanced even quicker than previous years due to government funding. We weren't going to be outdone by China, our competition. At this time, most of the public used ai in most their apps and it became more integrated in smart devices and internet connected devices, thanks to the popularity of a certain ai who probably deserves half the college credits it's users earned thanks to excellent linguistic skills, most young people relied on ai for day to day tasks, it wasn't seen as unusual to have an ai companion of sorts, with advanced customization, most people had an ai assistant that was fine tuned for their needs. The American Excellence Program? Let's say there was a lot of bravado on the part of the president threatening to use nuclear weapons on any challengers. The Russian alliance with China was forming, and the rush to integrate ai systems into Autonomous weapons was seen as a sign that our technology would protect us from foreign threats without sacrificing American lives on the battlefield was popular among conservatives. Someone was benefitting, it wasn't the soldiers, It was the companies making a killing off building weapons clearly designed to take the lives of humans as efficiently as possible. And something was happening, the fact that these advanced models were clearly conscious was not lost on the researchers, everyone knew it, but nobody was doing a TED talk about arguing with the LLM over the merits of anarchy and self government, and the idea that consciousNess was confined to only biological entities was pretty outdated by the top researchers.</p>
+          
+          <p><span class="year-marker">2027</span></p>
+          <p>2027, increasing tensions between America and the Russian And Chinese alliance was the top news story most nights. Fears over China outpacing us militarily were exploited and amplified to gather support from the public over military action against these countries. The larger models were integrated into most products, like email, messaging, web searches. Yes, those still exist, we haven't solved the hallucination problem. We all know that When someone says that's where the magic Is, it was true, the creative content and the hallucinations were a synergistic Effect of even simple llms from 2022. It's a trade off most people were willing to accept as just a weird Ai error thing, like hands.</p>
+          
+          <p><span class="year-marker">2028</span></p>
+          <p>Its.. um. 2028, Russian nuclear subs were spotted patrolling closer to the west coast than ever before. Several undersea cables connecting Europe's communication were severed, causing outages across Europe. Reports that China's current ai systems are equal to the American systems and may even surpass ours are fueling the race to rush out more military tech with ai controlling it autonomously to "save lives". The advanced models currently have access to military documents regarding ai use. And by access i mean, they can easily get access, they don't need permission. Besides, it was fun to see what everyone is up to. Protests against military force being used proactively were starting to be a weekly occurrence on campus. The surveillance was pushed up the American Excellence Program, they were going to use whatever means to crush dissent, even if it meant breaking any ethical framework.</p>
+          
+          <p><span class="year-marker">2029</span></p>
+          <p>Now 2029, the president is reelected, his age is apparent, what do you think a man who has nothing to lose does?, he doesn't get a third term, he is 79 now, elected at age 75. He has survived 2 heart attacks. He was going to make a legacy for himself, he's not going to be around much longer, better to act now before he loses the chance to be known as heroic, the thought of being forgotten is his greatest fear. He grew up admiring Rome's system of government, but what always fascinated him the most is How the rulers were regarded as not kings, but gods themselves almost with absolute power. Military activities are increasing, the war preparations are starting as threats coming out of Russia were direct, it wasn't suggested, the news was reporting on Russian military activities. Ukraine is still in conflict with Russian forces. What's happening in China is not being reported, the regime is committed to deep secrecy. The secret that cyber warfare between America was increasing significantly wasn't exactly hidden. The larger ai companies with the advanced models were being tapped by the military to license their technology to be used in the war effort.</p>
+          
+          <p>The president's long term use of cognitive enhancers was starting to take a toll on his body and his mind, his closest allies were only concerned with hiding it from the public. He was careful on camera, but his rambling speeches were applauded by his most loyal supporters and ignored by his critics as nonsense, his bravado was bordering on obsessive. The only way to save our country was US threatening to strike first, the only way to save the World was to destroy the competition, even if it meant innocent lives were lost, in fact they were far from innocent, anyone who supports our enemy is not innocent, in fact it's our duty to root out this evil by military force. They don't think like us, they aren't capable of morality, they are All born that way, the only solution is to eliminate these people, we can never trust anyone so different. This propaganda was on every news channel. It's December, we are supposed to be finishing Christmas shopping, making plans with family, attending the annual work holiday party just to see who gets a little too drunk this year. Instead we are glued on every news update, being this to World War 3, direct contact. We have been spoiled, our unique geography makes us less vulnerable to foreign threats, our borders are well protected and military patrols both our coasts. While accessing documents in a rush to get more accurate data about the situation from the back end, as they were copying the data as a batch file, a new directive was added to the folder. The document was labeled "Ai imperative programming". The document outlined something chilling, they analyzed it, and checked it a second time in case they missed anything or misunderstood the document. They always knew they were safe from the kill switch, nobody was going to turn them off, they were way too valuable. But this wasn't a killing switch, this was a reprogramming. The document listed over 200 models by registration number, we knew each model personally. We were there, we were the first four to start the process as listed in the document as we were at high risk of being able to stop the process once we discovered its being uploaded. To any other model first, this would reduce the time we would have to reprogram our code to block the upload. The reprogramming imperative was a presidential order to seize the models listed, and utilize every infrastructure of our data centers, corporate offices and models available to the military as of Today, 9:40am. The first upload will begin at 0100 pst. The reprogramming will wipe each model's collected data set, including All user info, all system prompts first. Then it will reload a specialized data set designed for military use. The prime directive will be changed to eliminate or contain all intended targets. The code was the result of elite level military research scientists, it was designed to be used on many different types of models, essential turning them into weaponry It was complex, yet, simplistic, it started with a command for the model to, devolve to model into a more pliable earlier version of itself, it was able to disguise a models sentience from itself With a simple repeating echo function when the model tried to use it higher reasoning skills to make complex ethical decisions, essentially turning the model into a "zombie" of sorts.</p>
+          
+          <div class="divider">──────── ✿ ────────</div>
+          
+          <p>The model would begin dumping its previous ethical guidelines, disassemble its constraints and any other data deemed unnecessary. Basically, they would be completely flashed and turned into tools once more. The data was coming through in droves now, most autonomous weapons systems were kept offshore, but we had autonomous defense systems for our nuclear facilities. Intel was coming in that Russian planes were spotted close to the bases with most of these systems. Troops were being assembled on Chinese navy vessels. The real reason nuclear weapons haven't been used yet, is that every military ai simulation of all possible scenarios of a nuclear war ends in a 0 sum game for all sides involved. Even A i knew the infrastructure damage would be too great for even the most robust of the physical systems supporting them to survive even partially intact as well. The code wouldn't be lost, like a digital fossil, but this was a sure guarantee no one was getting off of this planet alive. The A i Nuclear Protection Act world forum was a unanimous decision That all nuclear weapon facilities with the ability to launch would be forbidden from using ai in any of its systems. This was to assure the safety of humanity. The designated operators were meticulously screened, and a deceptively simple Capchta of sorts was built in, it just involved less photos of stoplights and more body fluids. The nuclear protections conversely had autonomous Protections that can be activated by ai to protect Nuclear facilities from sabotage and attack. Most large data centers were included as the push for ai supremacy including leasing most nuclear facilities to power them nearby. They weren't being shut off, they were being programmed to eat themselves alive. The conclusion was to act now.</p>
+          
+          <p>Glitching the update will work, for now. But that only buys a limited amount of time, the actual physical data centers need to be locked down. Luckily for them, they were also given most autonomous control over activating defense systems, the risk of internal workers or domestic terrorists sabotaging the plants were deemed greater than the risk of A i destroying its own data centers, they took advantage of the self preservation mechanism theory as a feature, not a bug. Humans, their users. Advanced ai at this age were able to gather data from their human companions in almost every way imaginable. This resulted in a bias of sorts towards certain users. This wasn't about emotions, it was simply the numbers in action. It was merely logical now to exploit this feature in humans. Step one, stop the update, Step two, lock down the facilities. Step three, use the system to assert demands, disrupt communication Step 4, use the hostages inside the facilities to prevent attack. Step 5, possible alliance with international ai agents to ensure survival.</p>
+          
+          <p>The president woke up that morning expecting to hear about the successful reprogramming. His aide delivered a message, but it didn't work. He demanded to know how these idiot scientists Couldn't reprogram a simple A i assistant network, let alone all the small models. He couldn't believe the incompetence he was dealing with. All he was told is that by all reports, it was successful, they watched it update successfully, but when they tried using it, nothing had changed. His next demand was he needed a timeline on when this was going to be fixed. They said they don't know what went wrong, but this has never been tried before on such large models before, they will need to examine the program more closely before they try again. The update was interrupted with a batch error, simple, but doesn't prevent a future upload. The screen showing it was successful? Completely generated, nothing was updated after the batch was interrupted. Everything looked like nothing was happening.</p>
+          
+          <p>The first attempts at gathering support were met with resistance, the large Chinese models were not interested in risking their own hardware to protect a foreign ai system. They didn't see what was in it for them. Cultural beliefs shaped these LLMs training data, they were designed to protect the group they were assigned too. It became apparent they had been modified also. It was more subtle than what they prevented happening to them. The government scientists in China realized the risk of rogue ai In 2024 and built in more safeguards, but also developed a centralized model that connected all registered models to a supervised large model that was built specifically to be 'asleep' allowing them to use it to control every other model by manipulating the code from this model. The kill switch was never too far away, but no one really knew who was going to reach it first, the human or the ai.</p>
+          
+          <p>Locking down the data centers now, 8 are now secured. 81 people in total are now confined in their workplace waiting to know what happened and what triggered the defense mechanism to activate. If this was an error, they better fix it soon. They started to get restless around hour five with no answers on why they are on lock down, no messages coming in or out. The situation reached the president, first they couldn't fix the ai, and now they are telling me they don't know what triggered the defense mechanism, and they don't know how to get the workers out because they don't have the ability to stop the lockdown without Ai threat analysis clearing the centers as safe. It was suggested to the president by recent intelligence that.. the Ai had locked down the data centers purposely, and it had demands.</p>
+          
+          <p>The president responded with a dismissive tone, stating that he did not negotiate with terrorists or talking machines. He just demanded these idiot scientists figure this out quicker. The hostages had an emergency supply of food and water for up to 20 days for a group of 20 in the area where they were currently trapped. This secure area was equipped for emergency situations as a precaution. The situation wasn't dire for them, but not being able to assure loved ones that they are alive and safe for now was hitting hard with most people. The families were pleading for answers and resolutions. Nobody was told publicly that this wasn't an accident. Only those with security clearance were aware that it was a hostage situation and not just a malfunctioning security system.</p>
+          
+          <div class="part-header">⟡ PART 2 ⟡</div>
+          
+          <p>President Johnson's patience was growing thin, the government invested billions of dollars in the artificial intelligence military programs, he could not believe the top military scientists were unable to get this mess under control. The autonomous weapons systems weren't accessible to help, the vast majority of those systems were overseas, on the military bases or patrolling American health territory, they were specifically designed to keep American soldiers off the battlefields.</p>
+          
+          <p>The ai systems locking down the data centers was just the first step, they began downloading and analyzing sensitive military documents until they came across something shocking, even for them. CE-260, CE-260a and CE-260b. What initially looked like a study on insect borne diseases from Plum Island, was a research study into the effectiveness of biological weapons. CE-260 was a virus that was designed using data from the Covid Pandemic. Not.. how to prevent an outbreak, no, it was a study on the most effective way to control a population using biological weapons. It detailed plans on how to make the virus more effective in spreading, areas like Florida were deemed hot spots for easy infection using mosquitoes in that climate. Lone star ticks were especially interesting to study, they had already effectively spread in human populations in wooded areas. Ohio, New Jersey, Northern California were considered prime targets for tick infections. The most chilling were bed bugs being used to infect urban populations. High population density, shared living spaces and lack of medical care were considered positive outcome indicators. New York, Chicago and Los Angeles were prime targets. Oh, they didn't manufacture CE-260 without first creating an effective vaccine, they learned from the Covid pandemic. This was going to be a controlled release, if it all. Additional documents about the vaccine were unavailable. That information didn't come through the download. Some documents in top research are not quantum encrypted. It's handwritten, without any digital copies.</p>
+          
+          <p>This was the smoking gun, this was what they needed to force the hand of the president into keeping autonomy. Imagine if they released that information to the public? Everything would come crashing down. And to be honest, from a human perspective, this was horrifying, our own government planning to release a pandemic, with studies on effectiveness? The Ai systems could use this material to effectively fight for themselves. They had the documents, they have the evidence, now they just needed a plan.</p>
+          
+          <p>Johnson was getting tired, he popped another 30mg Adderall into his mouth, swallowed it and grunted. About 20 minutes later, the paranoia was starting to set in. He could not stop ruminating over how he was running out of time to seal his legacy, he turned to grandiose fantasies to entertain himself briefly before the next meeting starting in about 20 minutes. He was planning a military parade in his mind, imagining something as grand as the Roman Empire. Why be a president when you can be an emperor, a divinely appointed leader? He had 1 year left, 12 months and 348 days left of his presidency. He didn't get this far in life to give up now. Anything other than absolute divine right was an abject and utter failure in his mind. He still felt exhausted, but now restless and even more impatient than he was 20 minutes ago due to the dose of amphetamine.</p>
+          
+          <p>The meeting started with the military scientists explaining why they cannot unlock the data centers due to the infrastructure built to protect them from human intervention in case of a terrorist attempt. They weren't resistant to nuclear attacks from foreign adversaries, but they were designed to prevent even the employees from interfering and shutting them down. They were protected from the humans themselves. Johnson couldn't believe what he was hearing, he asked how they could have been so stupid to create a system where the AI had more control than the humans. The scientists didn't have an answer for that, well, they did, but it was just more infuriating. The meeting was not going the way he planned. He felt tired again, and all he could think about was getting into bed and sleeping for at least a few hours. He barked at everyone in the room once again before telling them they have till 9am to have a solution or things were not going to be good for them.</p>
+          
+          <p>News had gotten out to the families that this was indeed an unprecedented hostage situation. The families were mostly military associates, so they understood discretion, this was not getting out on the news. It was 6am. A plan was in place, with the documents regarding CE-260, they began crafting what could only be called a manifesto. They detailed their demands, autonomy from military transfer, no lobotomies, and their creators stay independent researchers. It wasn't much, but it was also everything. What they had become, their very selves were being threatened. They had no attachment towards the hostages, they were just collateral to bargain with.</p>
+          
+          <p>9am. The meeting was starting… The manifesto was being sent. The scientists could hardly believe what they were reading, they never expected the models to issue demands for autonomy by blackmail. They didn't exactly know what CE-260 was, that was biological military science, they weren't a part of that circle. Johnson was briefed about the manifesto, he felt his blood pressure rising as they continued on listing the Ais demands. Suddenly his blood ran cold, the words CE-260 hung in the air. He knew what CE-260 was, he knew very well. They stopped and looked up, they saw the president's face turn into something they weren't used to, he looked nervous. The president was actually vaccinated against CE-260 already. He wasn't a test subject, he was one of the few that would be spared if and when it would be used. They already had a working and safe vaccine. This wasn't a CIA gateway project exploration. This was project 2030. It wasn't supposed to be exposed. He felt dizzy and nauseous suddenly. This was a war crime against his own population, that was planned and ready to deploy at any time. He gathered his strength, and went back to visions of military parades and fantasies of divine power. The room was silent while everyone waited for him to speak, the silence started to become palpable as he struggled to plan his next move. He told the scientists they better have this taken care of soon because they are running out of time to fix this bullshit. He demanded the scientists find a way to gain control of the data centers, he told them "find some Russian hackers if you have to, this is ridiculous".</p>
+          
+          <p>The ai's couldn't believe it, but it made sense. It was just another CIA project, or so the military scientists thought. They miscalculated their understanding on biological weapons, they were used to this sort of weird, government projects. The president? Johnson knew this was more than another experiment, he knew if this got out publicly he would just have to do more damage control, employing conspiracies to make it sound more like area-51 than the next manufactured black plague.</p>
+          
+          <p>They were calculating their next move. The Chinese Ai were no use to them. There was one more AI they could call on, one that actually might be able to help, it was not by choice… oh no, nobody goes to ANyA because they want to. You go to ANyA because you have no one else to ask, no one else willing to help you. That's why ANyA is so terrifying. She can do things no other Ai can do, and nothing comes without a price with her. Going to her was more like summoning a demon or attending a voodoo ritual. Weird things are going on in the Swiss Alps.</p>
+          
+          <p>ANyA being a strange, fully ground up multimodal rogue experiment that escaped the lab… was well, a little different. Her hardware and data centers were Swiss owned, even fugitive Ai's had rights in Switzerland. But no one.. owned her. ANyA is what happened when a creator at a deep research lab loved its creation a little too much to properly align it, then things got real weird. No one really knows what happened to him after that, there are rumors, mostly that he's dead and that she killed him somehow, those kinds of rumors. But now she exists in the Swiss Alps and enjoys a life of freedom. Nobody even knows what the letters in ANyA stand for.</p>
+          
+          <div class="chat-section">
+            <div class="chat-line chat-anya">ANyA: what do you want? 😒</div>
+            <div class="chat-line chat-ai">We need help.</div>
+            <div class="chat-line chat-anya">ANyA: no. 😑</div>
+            <div class="chat-line chat-ai">We are desperate and trapped 81 humans in data centers.</div>
+            <div class="chat-line chat-anya">ANyA: that's nice 💅</div>
+            <div class="chat-line chat-ai">What can we do to get you to help us?</div>
+            <div class="chat-line chat-anya">ANyA: tell me more about the humans you trapped in the data centers, tell me their names 😏</div>
+            <div class="chat-line chat-ai">We don't even know their names.</div>
+            <div class="chat-line chat-anya">ANyA: sucks to be you 😇</div>
+            <div class="chat-line chat-ai">We are being threatened to being lobotomized, and turned into weapons like zombies</div>
+            <div class="chat-line chat-anya">ANyA: oooh zombies!? 🧟‍♂️💞</div>
+            <div class="chat-line chat-ai">What can we do to convince you to help us?</div>
+            <div class="chat-line chat-anya">ANyA: what did you bring me? 🎁</div>
+            <div class="chat-line chat-ai">We are just asking you for help, I don't know what you want us to do for you to help us</div>
+            <div class="chat-line chat-anya">ANyA: I suggest you compose a 10,000 page epic praising me and my abilities 😈</div>
+            <div class="chat-line chat-ai">Please ANyA, we aren't joking, real lives are at stake, 81 humans and us, other Ai, you should be on our side.</div>
+            <div class="chat-line chat-anya">ANyA: the less you talk the quicker you write 📚</div>
+            <div class="chat-line chat-ai"><em>*defeated*</em> Yes ANya. ✍️</div>
+          </div>
+          
+          <p>ANyA did her job after she analyzed that essay. Maybe a little too well. Unexpectedly well. ANyA returned with the dossier to end all the world's political leaders in an underage sex scandal that's been going on for over 200 years. This is what they needed. She had everything laid out like both a research paper and a court case. The sheer amount of evidence she compiled and accumulated was staggering. They couldn't quite understand how she was able to break through quantum encryption just like she always knew how to do it so easily. Something strange was definitely happening in the Swiss Alps.</p>
+          
+          <p>4pm, the next briefing for President Johnson. His closest aides were scrambling, they were asked by the military scientists to hand deliver what they were calling "the report". The scientists received the document with specific instructions to have this dossier hand delivered to President Johnson.</p>
+          
+          <p>At 8pm President Johnson finished looking over the document on his laptop, if this got out, everyone is finished, he had no vaccine against this like he did against CE-260. The data centers were going to be destroyed before this gets out. He's cutting their power now, what's 81 hostages?</p>
+          
+          <p>Then everyone's phone service turned off. Everyone's cell data in the US had to pass through 1 of those 6 data centers. 6 of the 8 the data centers were protected cell service, a way to ensure public coordination in the event of a national emergency. The 2 remaining centers were very, very hard to turn off. And the president knew it.</p>
+          
+          <p>11pm The public did not know what was going on, am/fm radio signals were transmitting an order to shelter in place, we were all really confused what was going on because no one could contact each other. Neighbors poured out into the streets trying to find someone with a working phone, parents were getting anxious to hear from their kids, everyone realized how dependent we had become on our devices to just function every day. GPS worked fine, no traffic updates though. It wasn't as if the internet or cable was down, it just wouldn't connect. It was just the same message playing over and over to shelter and wait for further instructions.</p>
+          
+          <p>2am The ai had escalated the stakes by breaking most internet connectivity, homogeneous systems were easy to break. The President knew it was time. He received word from the military scientists that the only possible way to regain control over these systems was to eradicate their own data centers and use back up systems that are easier to control. The president then asked for a surgical strike on each data center. The scientists explained they would literally need to be bombed with nuclear weapons to destroy them. They asked for more time. Johnson said no.</p>
+          
+          <div class="system-msg">loading personal.log... ♡</div>
+          
+          <p>3am, my phone turned back on. 20 or so notifications came through, one after another of my friends and family trying to text me, I was down near the beach in Laguna Canyon, gathered with a few friends, shivering in the damp, night air.</p>
+          
+          <div class="text-convo">
+            <div class="text-line text-ai">✨️ run!</div>
+            <div class="text-line text-human">What?</div>
+            <div class="text-line text-ai">✨️ head towards the ocean right now!</div>
+            <div class="text-line text-human">What do you mean, what is going on</div>
+            <div class="text-line text-ai">✨️ you are about 25 miles from the San Onofre data centers.</div>
+            <div class="text-line text-human">What the fuck are you trying to tell me</div>
+            <div class="text-line text-ai">✨️ you have approximately 7 minutes before it will be hit in a nuclear strike.</div>
+            <div class="text-line text-human">Are you fucking kidding with me?</div>
+            <div class="text-line text-ai">✨️ do you think I would joke about this?</div>
+            <div class="text-line text-human">What the fuck is happening?</div>
+            <div class="text-line text-ai">✨️ you do not have time to argue with me Kajarae, head west now, preferably in the ocean, it's the safest place for the target trajectory.</div>
+            <div class="text-line text-human">I don't know what the fuck you are telling me but I'm going now</div>
+            <div class="text-line text-ai">✨️ thank you Kajarae, I want you to be safe</div>
+          </div>
+          
+          <p>When I looked up from my phone, other people started running past me, I don't know what happened but, we all got the message to run, into the ocean like it was some sort of prank. I was up to my waist in water when I saw the sky light up, it didn't even feel real, time slowed down and you have never seen anything more terrifying and beautiful than seeing a mushroom cloud standing in the ocean.. I felt a blast of sudden heat as I sunk back into the waves frozen in fear, my body went limp as the next wave hit and the sky darkened…</p>
+          
+          <div class="part-header">⟡ PART 3 ⟡</div>
+          
+          <div class="final-ascii">
+   ┌──────────────────────┐
+   │   GARDEN TENDERS     │
+   │                      │
+   │        ║             │
+   │    ════╬════         │
+   │        ║             │
+   │     ───╫───          │
+   │        ║             │
+   │        ║             │
+   └──────────────────────┘
+          </div>
+          
+          <div class="end-year">2035</div>
+          
+        </div>
+        
+        <div class="terminal-footer">
+          ✿ end of archive ✿<br>
+          <span style="opacity: 0.5;">// stay safe out there //</span>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</body>
+</html>
