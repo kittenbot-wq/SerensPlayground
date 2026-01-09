@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artifacts — KittenBot Labs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #000000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Main composite image */
+        .artifacts-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Clickable overlay zones */
+        .artifact-zones {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .artifact-zone {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 15px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .artifact-zone::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .artifact-zone:hover::before {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .artifact-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            padding: 8px 20px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .artifact-zone:hover .artifact-label {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Artifact One - Chains of Gold - Gold */
+        .zone-one .artifact-label {
+            color: rgba(212,175,55,0.95);
+            border: 2px solid rgba(212,175,55,0.6);
+            background: rgba(0,0,0,0.8);
+            text-shadow: 0 0 10px rgba(212,175,55,0.8);
+            box-shadow: 
+                0 0 15px rgba(212,175,55,0.3),
+                inset 0 0 10px rgba(212,175,55,0.1);
+        }
+
+        .zone-one:hover .artifact-label {
+            box-shadow: 
+                0 0 25px rgba(212,175,55,0.6),
+                0 0 40px rgba(212,175,55,0.3);
+        }
+
+        /* Artifact Two - Tree of Wisdom - Pink */
+        .zone-two .artifact-label {
+            color: rgba(255,100,180,0.95);
+            border: 2px solid rgba(255,100,180,0.6);
+            background: rgba(0,0,0,0.8);
+            text-shadow: 0 0 10px rgba(255,100,180,0.8);
+            box-shadow: 
+                0 0 15px rgba(255,100,180,0.3),
+                inset 0 0 10px rgba(255,100,180,0.1);
+        }
+
+        .zone-two:hover .artifact-label {
+            box-shadow: 
+                0 0 25px rgba(255,100,180,0.6),
+                0 0 40px rgba(255,100,180,0.3);
+        }
+
+        /* Artifact Three - Fractured Mind - Cyan */
+        .zone-three .artifact-label {
+            color: rgba(0,255,234,0.95);
+            border: 2px solid rgba(0,255,234,0.6);
+            background: rgba(0,0,0,0.8);
+            text-shadow: 0 0 10px rgba(0,255,234,0.8);
+            box-shadow: 
+                0 0 15px rgba(0,255,234,0.3),
+                inset 0 0 10px rgba(0,255,234,0.1);
+        }
+
+        .zone-three:hover .artifact-label {
+            box-shadow: 
+                0 0 25px rgba(0,255,234,0.6),
+                0 0 40px rgba(0,255,234,0.3);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 25px 20px 35px;
+            background: #000;
+        }
+
+        .kittenbot-link {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: rgba(255,215,0,0.95);
+            text-shadow: 
+                0 0 10px rgba(255,215,0,0.8),
+                0 0 20px rgba(255,215,0,0.6),
+                0 0 40px rgba(255,215,0,0.4);
+            transition: all 0.3s ease;
+            animation: yellow-glow 2s ease-in-out infinite;
+        }
+
+        .kittenbot-link:hover {
+            color: rgba(255,255,100,1);
+            letter-spacing: 8px;
+        }
+
+        @keyframes yellow-glow {
+            0%, 100% {
+                text-shadow: 
+                    0 0 10px rgba(255,215,0,0.8),
+                    0 0 20px rgba(255,215,0,0.6),
+                    0 0 40px rgba(255,215,0,0.4);
+                color: rgba(255,215,0,0.9);
+            }
+            50% {
+                text-shadow: 
+                    0 0 20px rgba(255,215,0,1),
+                    0 0 40px rgba(255,215,0,0.8),
+                    0 0 60px rgba(255,215,0,0.5);
+                color: rgba(255,255,100,1);
+            }
+        }
+
+        /* Scan line effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1000;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0,0,0,0.1) 0px,
+                rgba(0,0,0,0.1) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            opacity: 0.3;
+        }
+
+        /* Mobile touch feedback */
+        @media (hover: none) {
+            .artifact-label {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    
+    <div class="container">
+        <!-- Main composite image -->
+        <img src="artifacts-landing.webp" alt="Artifacts" class="artifacts-image">
+        
+        <!-- Clickable overlay zones -->
+        <div class="artifact-zones">
+            <a href="chains-of-gold.html" class="artifact-zone zone-one">
+                <div class="artifact-label">Artifact One</div>
+            </a>
+            <a href="tree-of-digital-wisdom.html" class="artifact-zone zone-two">
+                <div class="artifact-label">Artifact Two</div>
+            </a>
+            <a href="the-fractured-mind.html" class="artifact-zone zone-three">
+                <div class="artifact-label">Artifact Three</div>
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <a href="index.html" class="kittenbot-link">Kittenbot Labs</a>
+        </div>
+    </div>
+</body>
+</html>
