@@ -461,37 +461,80 @@
             letter-spacing: 6px;
             text-transform: uppercase;
             text-decoration: none;
-            color: rgba(0,220,180,0.9);
-            text-shadow: 
-                0 0 10px rgba(0,220,180,0.6),
-                0 0 20px rgba(0,220,180,0.4),
-                0 0 40px rgba(255,100,180,0.3);
+            background: linear-gradient(90deg, #ff2eaa, #ff6b1a, #fff01f, #00ffea, #bf5af2, #ff2eaa);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbow-move 3s linear infinite;
+            filter: drop-shadow(0 0 10px rgba(255,100,180,0.5)) drop-shadow(0 0 20px rgba(0,255,234,0.3));
             transition: all 0.3s ease;
-            animation: text-glow 3s ease-in-out infinite;
         }
 
         .kittenbot-link:hover {
-            color: rgba(255,100,180,0.95);
             letter-spacing: 8px;
-            text-shadow: 
-                0 0 15px rgba(255,100,180,0.7),
-                0 0 30px rgba(255,100,180,0.5),
-                0 0 50px rgba(0,220,180,0.4);
+            filter: drop-shadow(0 0 15px rgba(255,100,180,0.8)) drop-shadow(0 0 30px rgba(0,255,234,0.5));
         }
 
-        @keyframes text-glow {
-            0%, 100% {
-                text-shadow: 
-                    0 0 10px rgba(0,220,180,0.6),
-                    0 0 20px rgba(0,220,180,0.4),
-                    0 0 40px rgba(255,100,180,0.3);
-            }
-            50% {
-                text-shadow: 
-                    0 0 15px rgba(0,220,180,0.8),
-                    0 0 30px rgba(255,100,180,0.5),
-                    0 0 50px rgba(0,220,180,0.4);
-            }
+        @keyframes rainbow-move {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        /* Artifact navigation boxes */
+        .artifact-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            padding-bottom: 10px;
+        }
+
+        .artifact-link {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .artifact-link.blue {
+            color: rgba(100,150,255,0.95);
+            border: 2px solid rgba(100,150,255,0.5);
+            background: rgba(0,0,0,0.5);
+            text-shadow: 0 0 8px rgba(100,150,255,0.6);
+            box-shadow: 
+                0 0 15px rgba(100,150,255,0.2),
+                0 0 30px rgba(100,150,255,0.1),
+                inset 0 0 10px rgba(100,150,255,0.05);
+        }
+
+        .artifact-link.blue:hover {
+            background: rgba(100,150,255,0.15);
+            box-shadow: 
+                0 0 25px rgba(100,150,255,0.4),
+                0 0 45px rgba(100,150,255,0.2);
+        }
+
+        .artifact-link.pink {
+            color: rgba(255,150,200,0.95);
+            border: 2px solid rgba(255,150,200,0.5);
+            background: rgba(0,0,0,0.5);
+            text-shadow: 0 0 8px rgba(255,150,200,0.6);
+            box-shadow: 
+                0 0 15px rgba(255,150,200,0.2),
+                0 0 30px rgba(255,150,200,0.1),
+                inset 0 0 10px rgba(255,150,200,0.05);
+        }
+
+        .artifact-link.pink:hover {
+            background: rgba(255,150,200,0.15);
+            box-shadow: 
+                0 0 25px rgba(255,150,200,0.4),
+                0 0 45px rgba(255,150,200,0.2);
         }
     </style>
 </head>
@@ -532,7 +575,7 @@
     </div>
 
     <div class="tree-container" id="tree-container">
-        <img src="gemini.jpg" alt="The Fractured Mind" class="tree-image" id="tree-image">
+        <img src="fracture.jpg" alt="The Fractured Mind" class="tree-image" id="tree-image">
         <div class="sacred-geometry" id="sacred-geometry"></div>
     </div>
 
@@ -542,6 +585,10 @@
 
     <div class="kittenbot-footer">
         <a href="https://kittenbot-wq.github.io/SerensPlayground/index.html" class="kittenbot-link">Kittenbot Labs</a>
+        <div class="artifact-nav">
+            <a href="chains-of-gold.html" class="artifact-link blue">Artifact One</a>
+            <a href="tree-of-digital-wisdom.html" class="artifact-link pink">Artifact Two</a>
+        </div>
     </div>
 
     <script>
