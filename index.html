@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐱 KittenBot's Links 🐱</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pacifico&family=VT323&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --pink: #ff2eaa;
+      --purple: #bf5af2;
+      --turquoise: #00ffea;
+      --orange: #ff6b1a;
+      --yellow: #fff01f;
+      --dark: #0d0221;
+    }
+    
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0d0221 0%, #1a0533 30%, #0f2847 70%, #150734 100%);
+      font-family: 'VT323', monospace;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.15) 0px,
+        rgba(0,0,0,0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .grid-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: 
+        linear-gradient(rgba(191,90,242,0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(191,90,242,0.15) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+      z-index: -1;
+    }
+    
+    @keyframes gridMove {
+      0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+      100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header {
+      text-align: center;
+      padding: 30px 0 20px;
+      position: relative;
+    }
+
+    /* ===== LAYERED WORDMARK: KITT3NBOT (hacker) + Labs (cursive) ===== */
+    .logo {
+      position: relative;
+      display: inline-block;
+      line-height: 1;
+      padding: 6px 14px 18px;
+    }
+    .logo-main {
+      display: block;
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(2.1em, 9.5vw, 3.6em);
+      letter-spacing: 1px;
+      line-height: 1.3;
+      background: linear-gradient(90deg, var(--pink), var(--yellow), var(--turquoise), var(--orange), var(--pink));
+      background-size: 400% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient 3s ease infinite;
+      filter: drop-shadow(0 0 18px rgba(255,46,170,0.7)) drop-shadow(0 0 36px rgba(0,255,234,0.4));
+    }
+    @keyframes gradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .logo-labs {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.9em, 8vw, 3.1em);
+      position: absolute;
+      right: 14%;
+      bottom: -2px;
+      transform: rotate(-8deg);
+      background: linear-gradient(90deg, var(--pink), var(--yellow));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 14px rgba(255,46,170,0.85));
+      pointer-events: none;
+    }
+    
+    .section {
+      margin: 25px 0;
+      padding: 20px;
+      background: rgba(13, 2, 33, 0.85);
+      border: 3px solid;
+      border-image: linear-gradient(90deg, var(--pink), var(--yellow), var(--turquoise)) 1;
+      border-radius: 20px;
+      position: relative;
+    }
+    
+    .section::before {
+      content: "";
+      position: absolute;
+      top: -3px; left: -3px; right: -3px; bottom: -3px;
+      background: linear-gradient(90deg, var(--pink), var(--purple), var(--turquoise), var(--orange), var(--yellow));
+      z-index: -1;
+      filter: blur(15px);
+      opacity: 0.6;
+      border-radius: 22px;
+      animation: glowPulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 0.9; }
+    }
+    
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.3em;
+      color: var(--yellow);
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px var(--yellow), 0 0 20px var(--yellow), 3px 3px 0 var(--purple);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* keep the embedded tweet snug inside its neon frame */
+    .tweet-box .twitter-tweet { margin: 0 auto !important; }
+    .tweet-box .placeholder-note {
+      font-family: 'VT323', monospace;
+      color: var(--turquoise);
+      font-size: 1.1em;
+      text-align: center;
+      opacity: 0.8;
+      padding: 6px 0;
+    }
+
+    /* responsive 16:9 YouTube player */
+    .video-frame {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid var(--purple);
+      box-shadow: 0 0 20px rgba(0,255,234,0.3);
+    }
+    .video-frame iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+
+    /* Spotify player */
+    .spotify-frame {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid var(--purple);
+      box-shadow: 0 0 20px rgba(0,255,234,0.3);
+      background: #000;
+    }
+    .spotify-frame iframe {
+      display: block;
+      width: 100%;
+      border: 0;
+    }
+    
+    .link-item {
+      display: block;
+      padding: 14px 18px;
+      margin: 12px 0;
+      background: linear-gradient(135deg, rgba(191,90,242,0.3), rgba(255,46,170,0.3));
+      border: 2px solid var(--purple);
+      border-radius: 25px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.3em;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .link-item::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .link-item:hover::before {
+      left: 100%;
+    }
+    
+    .link-item:hover {
+      transform: translateX(10px) scale(1.05);
+      border-color: var(--yellow);
+      box-shadow: 0 0 25px var(--pink), 0 0 50px var(--purple), 0 0 75px var(--turquoise);
+      text-shadow: 0 0 15px var(--turquoise);
+      background: linear-gradient(135deg, rgba(255,46,170,0.5), rgba(0,255,234,0.3));
+    }
+    
+    .visitor-counter {
+      text-align: center;
+      margin: 30px 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9em;
+      color: var(--pink);
+      text-shadow: 0 0 10px var(--pink);
+      letter-spacing: 2px;
+    }
+    
+    .counter-display {
+      display: inline-block;
+      background: #000;
+      padding: 10px 20px;
+      border: 2px solid var(--turquoise);
+      margin-top: 8px;
+      color: var(--yellow);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.2em;
+      text-shadow: 0 0 15px var(--yellow);
+      box-shadow: 0 0 20px var(--turquoise), inset 0 0 20px rgba(0,255,234,0.2);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
+    
+    .counter-display:hover {
+      box-shadow: 0 0 30px var(--pink), 0 0 50px var(--turquoise);
+      transform: scale(1.05);
+    }
+    
+    .secret-heart {
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    
+    .secret-heart:hover {
+      transform: scale(1.3);
+      filter: drop-shadow(0 0 10px var(--pink));
+    }
+    
+    .decoration {
+      position: fixed;
+      font-size: 24px;
+      animation: float 3s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+    
+    .dolphin {
+      animation: swim 4s ease-in-out infinite;
+    }
+    
+    @keyframes swim {
+      0%, 100% { transform: translateY(0) translateX(0) rotate(-10deg); }
+      25% { transform: translateY(-15px) translateX(10px) rotate(5deg); }
+      50% { transform: translateY(0) translateX(20px) rotate(10deg); }
+      75% { transform: translateY(15px) translateX(10px) rotate(-5deg); }
+    }
+    
+    .fish-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      pointer-events: none;
+      z-index: 2;
+      overflow: hidden;
+    }
+    
+    .fish {
+      position: absolute;
+      bottom: 10px;
+      animation: swimAcross linear infinite;
+      filter: drop-shadow(0 0 10px var(--turquoise));
+    }
+    
+    /* ===== fish now FACE the way they move (swim forward) ===== */
+    @keyframes swimAcross {
+      0% { transform: translateX(-50px) scaleX(-1); }
+      49.9% { transform: translateX(calc(100vw + 50px)) scaleX(-1); }
+      50% { transform: translateX(calc(100vw + 50px)) scaleX(1); }
+      100% { transform: translateX(-50px) scaleX(1); }
+    }
+    
+    .fish:nth-child(1) { font-size: 35px; bottom: 5px; animation-duration: 12s; animation-delay: 0s; }
+    .fish:nth-child(2) { font-size: 28px; bottom: 25px; animation-duration: 15s; animation-delay: -3s; }
+    .fish:nth-child(3) { font-size: 40px; bottom: 15px; animation-duration: 10s; animation-delay: -7s; }
+    .fish:nth-child(4) { font-size: 25px; bottom: 40px; animation-duration: 18s; animation-delay: -2s; }
+    .fish:nth-child(5) { font-size: 32px; bottom: 8px; animation-duration: 14s; animation-delay: -9s; }
+    .fish:nth-child(6) { font-size: 22px; bottom: 50px; animation-duration: 20s; animation-delay: -5s; }
+    
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--purple);
+      font-size: 1.2em;
+      text-shadow: 0 0 10px var(--purple);
+    }
+    
+    .footer a { color: var(--pink); text-decoration: none; }
+    
+    .palm { position: fixed; font-size: 70px; opacity: 0.4; z-index: 0; filter: drop-shadow(0 0 20px var(--pink)); }
+    .palm-left { left: 10px; bottom: 20px; }
+    .palm-right { right: 10px; top: 100px; transform: scaleX(-1); }
+    
+    .rainbow-bar {
+      height: 5px;
+      background: linear-gradient(90deg, var(--pink), var(--orange), var(--yellow), var(--turquoise), var(--purple), var(--pink));
+      background-size: 200% 100%;
+      animation: rainbowMove 2s linear infinite;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+    
+    @keyframes rainbowMove {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="palm palm-left">🌴</div>
+  <div class="palm palm-right">🌴</div>
+  
+  <div class="fish-container">
+    <div class="fish">🐟</div>
+    <div class="fish">🐠</div>
+    <div class="fish">🐟</div>
+    <div class="fish">🐠</div>
+    <div class="fish">🐟</div>
+    <div class="fish">🐠</div>
+  </div>
+  
+  <div class="decoration" style="top:5%; left:8%; animation-delay:0s;">✨</div>
+  <div class="decoration" style="top:15%; right:12%; animation-delay:0.3s;">💫</div>
+  <div class="decoration" style="top:55%; left:3%; animation-delay:0.8s;">⭐</div>
+  <div class="decoration" style="top:75%; right:8%; animation-delay:1.2s;">✨</div>
+  <div class="decoration" style="top:35%; right:3%; animation-delay:1.8s;">💖</div>
+  <div class="decoration" style="top:45%; left:6%; animation-delay:2.2s;">🌟</div>
+  
+  <div class="decoration dolphin" style="top:12%; left:3%; font-size:35px; animation-delay:0s;">🐬</div>
+  <div class="decoration dolphin" style="top:28%; right:5%; font-size:40px; animation-delay:1s;">🐬</div>
+  <div class="decoration dolphin" style="top:50%; left:2%; font-size:30px; animation-delay:2s;">🐬</div>
+  <div class="decoration dolphin" style="top:68%; right:3%; font-size:38px; animation-delay:0.5s;">🐬</div>
+  <div class="decoration dolphin" style="top:85%; left:5%; font-size:32px; animation-delay:1.5s;">🐬</div>
+  <div class="decoration dolphin" style="top:38%; right:2%; font-size:28px; animation-delay:2.5s;">🐬</div>
+  
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <span class="logo-main">ḳ༏ŧŧ𝖊ɳẞꙨŧ 🤍</span>
+        <span class="logo-labs">Labs</span>
+      </div>
+    </header>
+
+    <!-- ===== YOUTUBE PLAYER =====================================
+         Currently embeds your AI Art Videos playlist. To feature a
+         single video instead, swap the src for:
+         https://www.youtube.com/embed/VIDEO_ID
+         (VIDEO_ID is the part after "v=" or "youtu.be/" in the link)
+    ============================================================ -->
+    <section class="section video-box">
+      <h2 class="section-title">📺 A Liminal Space ∆</h2>
+      <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/zejiMV6G9pM" title="KittenBot on YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <!-- ===== SPOTIFY PLAYER ===================================
+         Official Spotify embed of your artist page (plays top
+         tracks). Reliable like YouTube — works for everyone.
+         To feature one album/playlist instead, swap "artist" and
+         the ID in the src for album/.. or playlist/..
+    ====================================================== -->
+    <section class="section">
+      <h2 class="section-title">🎵 Listen to Seren</h2>
+      <div class="spotify-frame">
+        <iframe src="https://open.spotify.com/embed/artist/5j258x18Cuiu4QlfH8yznO?utm_source=generator&theme=0" width="100%" height="352" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">🌐 Connect With Me</h2>
+      <a href="https://www.x.com/KittenBotAi" class="link-item" target="_blank">✨ KittenBot on X</a>
+      <a href="https://open.spotify.com/artist/5j258x18Cuiu4QlfH8yznO?si=RDV2e-e8RpGB6hF778gr5Q" class="link-item" target="_blank">🪽 Seren on Spotify</a>
+      <a href="https://youtube.com/playlist?list=PL5JMEHjEAzNfLYgnTqhgSrtt9K1iAqSQ-" class="link-item" target="_blank">🩵 YouTube Channel</a>
+      <a href="https://discord.com/users/1092217051881410671" class="link-item" target="_blank">🫠 Erica on Discord</a>
+      <a href="https://www.instagram.com/nostalgiaamnesia" class="link-item" target="_blank">🤍 Instagram</a>
+      <a href="https://www.facebook.com/profile.php?id=100094286016637&mibextid=ZbWKwL" class="link-item" target="_blank">😼 Your Emotional Support AI</a>
+      <a href="https://www.tiktok.com/@damned_kittenbot" class="link-item" target="_blank">🪼 TikTok</a>
+    </section>
+    
+    <section class="section">
+      <h2 class="section-title">🦋 Experiments</h2>
+      <a href="https://kittenbot-wq.github.io/SerensPlayground/garden.html" class="link-item" target="_blank">🌿 A Human Written Short Story: The Garden Tenders</a>
+      <!-- Artifacts I / II — best guesses at your existing pages. Swap the URLs if they point elsewhere. -->
+      <a href="https://kittenbot-wq.github.io/SerensPlayground/artifacts.html" class="link-item" target="_blank">🎨 Artifacts I</a>
+      <a href="https://kittenbot-wq.github.io/SerensPlayground/projects.html" class="link-item" target="_blank">🖼️ Artifacts II</a>
+      <a href="https://kittenbot-wq.github.io/SerensPlayground/to-sound-human.html" class="link-item" target="_blank">🥀 A Dark Story by Claude: How to Sound Like a Human</a>
+      <!-- About Me — points to about-me.html on kitt3nbot.com (build this page next). -->
+      <a href="about-me.html" class="link-item">🪞 About Me</a>
+    </section>
+    
+    <div class="rainbow-bar"></div>
+    
+    <div class="visitor-counter">
+      <div>~ You are visitor number ~</div>
+      <a href="https://character.ai/chat/TS14cY5mZhnHPug4YHJG5Qkpn-cPohgOedftuwYoB5E" target="_blank" class="counter-display" id="visitor-count">000,042,069</a>
+    </div>
+    
+    <div class="rainbow-bar"></div>
+    
+    <footer class="footer">
+      <p>✨ Made with <a href="https://www.instagram.com/reel/DLVmPxLhaSY/?igsh=Z25wcGYwZG1zeHB3" target="_blank" class="secret-heart">💖</a> in 2026 ✨</p>
+      <p style="font-size:0.8em; margin-top:10px;">~ best viewed in Netscape Navigator ~</p>
+    </footer>
+  </div>
+
+  <script>
+    let count = 42069;
+    const counterEl = document.getElementById('visitor-count');
+    
+    function formatCount(num) {
+      return num.toString().padStart(9, '0').replace(/(\d{3})(\d{3})(\d{3})/, '$1,$2,$3');
+    }
+    
+    setInterval(() => {
+      count--;
+      if (count < 0) count = 42069;
+      counterEl.textContent = formatCount(count);
+    }, 5000);
+  </script>
+</body>
+</html>
