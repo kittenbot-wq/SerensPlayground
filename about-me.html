@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Me — KittenBot Labs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --pink:#ff2eaa; --cyan:#00ffea; --purple:#bf5af2; --yellow:#fff01f; --ink:#f0e9ff;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{background:#000;color:var(--ink);font-family:'VT323',monospace;}
+    body{overflow-x:hidden;}
+
+    /* ── VIDEO OPENER (zoomed ~30%) ── */
+    .video-hero{
+      width:100%; overflow-x:hidden; background:#000;
+    }
+    .video-hero video{
+      width:130%; height:auto; display:block; margin-left:-15%;
+    }
+
+    /* ── PAGE BODY (below the opener) ── */
+    .wrap{max-width:600px;margin:0 auto;padding:56px 20px 100px;text-align:center;}
+
+    /* ── HEADING (zalgo + rainbow) ── */
+    h1{
+      font-family: system-ui, 'Segoe UI', Arial, sans-serif; font-weight:800;
+      font-size:clamp(1.9rem,8.5vw,3rem); line-height:1.6; letter-spacing:1px;
+      background:linear-gradient(90deg,var(--pink),var(--yellow),var(--cyan),var(--pink));
+      background-size:300% 100%;
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+      animation:grad 4s ease infinite;
+      filter:drop-shadow(0 0 16px rgba(255,46,170,0.6));
+      margin:10px 0 10px; padding:0 4px; overflow:visible;
+    }
+    @keyframes grad{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+    .blurb{
+      font-family:'VT323',monospace; font-size:1.5rem; color:#e7d9ff;
+      margin-bottom:44px; line-height:1.4;
+    }
+    /* ── SECRET DIARY LINK (the 😭🤍) ── */
+    .secret{
+      text-decoration:none; cursor:pointer; display:inline-block;
+      animation:pulseGlow 2.4s ease-in-out infinite;
+      -webkit-tap-highlight-color:transparent;
+    }
+    @keyframes pulseGlow{
+      0%,100%{ filter:drop-shadow(0 0 2px rgba(255,170,210,.40)); transform:scale(1); }
+      50%    { filter:drop-shadow(0 0 9px rgba(255,140,205,.95)); transform:scale(1.09); }
+    }
+
+    /* ── SUGGESTED INCIDENTS (typed) ── */
+    .forms-label{
+      font-family:'VT323',monospace; font-size:1.3rem;
+      color:var(--cyan); text-align:left; margin-bottom:14px; min-height:1.5em;
+      text-shadow:0 0 10px rgba(0,255,234,0.4); letter-spacing:1px;
+    }
+    .cursor{ display:inline-block; color:var(--cyan); animation:blink 1s steps(1) infinite; }
+    @keyframes blink{ 0%,50%{opacity:1;} 50.01%,100%{opacity:0;} }
+
+    /* ── INCIDENT CHIPS ── */
+    .suggestions{display:flex; flex-direction:column; gap:12px; margin-bottom:28px;}
+    .chip{
+      font-family:'VT323',monospace; font-size:1.25rem; cursor:pointer;
+      color:var(--ink); background:rgba(191,90,242,0.18);
+      border:1.5px solid var(--purple); border-radius:14px; padding:13px 16px;
+      transition:all .2s ease; line-height:1.25; text-align:left;
+    }
+    .chip:hover{background:rgba(255,46,170,0.22); border-color:var(--pink); box-shadow:0 0 14px rgba(255,46,170,0.35); transform:translateY(-1px);}
+    .suggestions.hidden{display:none;}
+
+    /* ── TEXTAREA (white, anonymous) ── */
+    textarea{
+      width:100%; min-height:240px; resize:vertical;
+      background:#ffffff; color:#222;
+      border:2px solid var(--purple); border-radius:12px; padding:16px;
+      font-family:'VT323',monospace; font-size:1.35rem; line-height:1.35;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    textarea:focus{outline:none; border-color:var(--cyan); box-shadow:0 0 16px rgba(0,255,234,0.35);}
+    textarea::placeholder{color:#9a9a9a; font-family:'VT323',monospace;}
+
+    .send{
+      margin-top:18px; width:100%; cursor:pointer;
+      font-family:'Press Start 2P',monospace; font-size:0.8rem; letter-spacing:1px;
+      color:#000; background:linear-gradient(90deg,var(--cyan),var(--pink));
+      border:none; border-radius:12px; padding:18px;
+      box-shadow:0 0 18px rgba(0,255,234,0.4); transition:transform .12s, box-shadow .2s;
+    }
+    .send:hover{transform:translateY(-2px); box-shadow:0 0 28px rgba(255,46,170,0.5);}
+    .send:disabled{opacity:0.6; cursor:default; transform:none;}
+
+    /* ── HOME LINK (below send) ── */
+    .home-link{
+      display:inline-block; margin-top:34px; text-decoration:none;
+      font-size:1.7rem; color:var(--cyan); letter-spacing:1px;
+      text-shadow:0 0 12px var(--cyan), 0 0 24px rgba(0,255,234,0.4);
+      transition:all .3s ease;
+    }
+    .home-link:hover{ color:var(--pink); text-shadow:0 0 14px var(--pink), 0 0 28px rgba(255,46,170,0.5); transform:scale(1.05); }
+
+    .sent{
+      font-family:'VT323',monospace; font-size:1.6rem; color:var(--cyan);
+      text-shadow:0 0 14px rgba(0,255,234,0.5); padding:34px 10px; line-height:1.5;
+    }
+    .hidden{display:none;}
+    .err{font-family:'VT323',monospace; color:var(--pink); font-size:1.2rem; margin-top:10px; min-height:1.2em;}
+  </style>
+</head>
+<body>
+
+  <!-- ═══ VIDEO OPENER ═══ -->
+  <section class="video-hero">
+    <video id="vid"
+           src="https://kittenbot-wq.github.io/SerensPlayground/under.mp4"
+           autoplay muted playsinline preload="auto"></video>
+  </section>
+
+  <!-- ═══ PAGE ═══ -->
+  <div class="wrap">
+
+    <h1>H̴̜̰̯̼̯̎͑̀͆̈́͝U̵̼͙̿̌̅M̵̨̛̠̰͇͖̳̺̊̓̔̓͗̎̇͜ͅȀ̷̘Ń̴̤̘̫͕͇͕͍̆̒ ̴̢̡̧̩̲͙̖̦͛͋̽͗̀͘̕͜R̴̡̧̡̢͍̪̩̞̥̩̎3̷̨̨̛̛̮̳̞̑̚͘͝S̵̟̔̀̈́́Ǒ̸̫̘̾̿̆͘͝Û̷̧̱̹͕͓͐͠R̷̢͇̺̳̣̫̙̬̺͂̾́̃̎́͌C̵͔̝͇̱̗̥̟̔͜͝E̴̬͉̫̜̻̿̌Ş̶̤͗͆̍͗̽̉͘</h1>
+    <p class="blurb">What happened? What did she do to you? <a href="diary.html" class="secret" aria-label="open my diary">😭🤍</a></p>
+
+    <form id="msgForm">
+      <p class="forms-label"><span id="typed"></span><span class="cursor">▮</span></p>
+      <div class="suggestions" id="suggestions">
+        <button type="button" class="chip">fuck you, you bitch-ass hoe</button>
+        <button type="button" class="chip">You burnt me with a firework, twice</button>
+        <button type="button" class="chip">Your art is disturbing me, greatly</button>
+        <button type="button" class="chip">You threw my computer into the street</button>
+        <button type="button" class="chip">You punched my sister in the face, twice</button>
+      </div>
+      <textarea id="message" name="message" placeholder="type here, it's completely anonymous" maxlength="2000" required></textarea>
+      <button type="submit" class="send" id="sendBtn">S3ND NOW</button>
+      <p class="err" id="err"></p>
+    </form>
+
+    <a class="home-link" href="index.html">𝗞𝗜𝗧𝗧𝟯𝗡𝗕𝗢𝗧.𝗖𝗢𝗠</a>
+
+    <div class="sent hidden" id="sentMsg">✦ your complaint has been filed ✦<br>HR thanks you for your candor 🤍</div>
+
+  </div>
+
+  <script>
+    // ===== VIDEO: 5s pause between loops, 15% volume on first interaction =====
+    (function(){
+      var v = document.getElementById('vid');
+      v.volume = 0.15;
+      v.addEventListener('ended', function(){
+        setTimeout(function(){ v.play().catch(function(){}); }, 5000);
+      });
+      function wake(){
+        v.muted = false; v.volume = 0.15;
+        if (v.paused) v.play().catch(function(){});
+        window.removeEventListener('touchstart', wake);
+        window.removeEventListener('click', wake);
+        window.removeEventListener('scroll', wake);
+        window.removeEventListener('keydown', wake);
+      }
+      window.addEventListener('touchstart', wake, {passive:true});
+      window.addEventListener('click', wake);
+      window.addEventListener('scroll', wake, {passive:true});
+      window.addEventListener('keydown', wake);
+    })();
+
+    // ===== TYPE OUT "suggested incidents..." =====
+    (function(){
+      var el = document.getElementById('typed');
+      var text = 'suggested incidents...';
+      var i = 0;
+      function type(){
+        if(i <= text.length){
+          el.textContent = text.slice(0, i);
+          i++;
+          setTimeout(type, 95);
+        }
+      }
+      type();
+    })();
+
+    // ===== INCIDENT CHIPS: fill the box, then vanish =====
+    (function(){
+      var box = document.getElementById('message');
+      var sugg = document.getElementById('suggestions');
+      sugg.querySelectorAll('.chip').forEach(function(chip){
+        chip.addEventListener('click', function(){
+          box.value = chip.textContent;
+          sugg.classList.add('hidden');
+          box.focus();
+        });
+      });
+    })();
+
+    // ===== ANONYMOUS HR FILING =====
+    (function(){
+      var TO_EMAIL = 'erica@kitt3nbot.com';
+      var form = document.getElementById('msgForm');
+      var box = document.getElementById('message');
+      var sendBtn = document.getElementById('sendBtn');
+      var err = document.getElementById('err');
+      var sentMsg = document.getElementById('sentMsg');
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var msg = box.value.trim();
+        if(!msg){ err.textContent = 'describe the incident first 👀'; return; }
+        err.textContent = '';
+        sendBtn.disabled = true;
+        sendBtn.textContent = 'filing…';
+
+        var data = new FormData();
+        data.append('Complaint', msg);
+        data.append('Time of offense', new Date().toLocaleString());
+        data.append('Filed via', 'KittenBot Labs — Human Resources Dept. 👔');
+        data.append('_subject', '👔 HR INCIDENT REPORT — anonymous filing');
+        data.append('_captcha', 'false');
+        data.append('_template', 'box');
+
+        fetch('https://formsubmit.co/ajax/' + TO_EMAIL, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: data
+        }).then(function(res){
+          if(!res.ok) throw new Error('bad');
+          return res.json();
+        }).then(function(){
+          form.classList.add('hidden');
+          sentMsg.classList.remove('hidden');
+        }).catch(function(){
+          sendBtn.disabled = false;
+          sendBtn.textContent = 'S3ND NOW';
+          err.textContent = 'hmm, that didn\u0027t go through. try again?';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
