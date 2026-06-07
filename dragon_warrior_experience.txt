@@ -1,0 +1,62 @@
+-Dragon Warrior: Experience Chart-
+ v. 1.0
+ June 6, 2001
+ Strife132
+ LordApollo7@yahoo.com
+
+---------------------------------------
+
+   That's right folks, Strife132 returns to the scene of FAQ writing
+with a simple EXP chart for an old classic. I was playing through this
+game when I recalled this little card I had a long time ago with all the
+levels, how much EXP it takes to get to those levels, and what spells you
+learn at what level. I knew this was long lost, but I figured that I'd
+surely be able to find one at GameFAQs! So, I hopped online and went to
+GameFAQs and, surprisingly, there was not one single specialized FAQ
+just for the EXP chart. So I decided to make one myself for those like
+myself who don't need a whole walkthrough but rather, are just replaying
+this old game and find that an EXP chart makes things much easier. So,
+without further ado, the EXP chart.
+
+---------------------------------------
+
+ -----------------------------------
+| Level | Experience | Spell        |
+|-----------------------------------|
+| 1     | 0          | ---          |
+| 2     | 7          | ---          |
+| 3     | 23         | Heal         |
+| 4     | 47         | Hurt         |
+| 5     | 110        | ---          |
+| 6     | 220        | ---          |
+| 7     | 450        | Sleep        |
+| 8     | 800        | ---          |
+| 9     | 1,300      | Radiant      |
+| 10    | 2,000      | Stopspell    |
+| 11    | 2,900      | ---          |
+| 12    | 4,000      | Outside      |
+| 13    | 5,500      | Return       |
+| 14    | 7,500      | ---          |
+| 15    | 10,000     | Repel        |
+| 16    | 13,000     | ---          |
+| 17    | 16,000     | Healmore     |
+| 18    | 19,000     | ---          |
+| 19    | 22,000     | Hurtmore     |
+| 20    | 26,000     | ---          |
+| 21    | 30,000     | ---          |
+| 22    | 34,000     | ---          |
+| 23    | 38,000     | ---          |
+| 24    | 42,000     | ---          |
+| 25    | 46,000     | ---          |
+| 26    | 50,000     | ---          |
+| 27    | 54,000     | ---          |
+| 28    | 58,000     | ---          |
+| 29    | 62,000     | ---          |
+| 30    | 65,535     | ---          |
+ -----------------------------------
+
+---------------------------------------
+
+Copyright (c) 2001 Strife132
+
+
