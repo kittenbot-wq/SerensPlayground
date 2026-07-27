@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🐱 KittenBot's Links 🐱</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pacifico&family=VT323&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    img { max-width: 100%; }
     
     :root {
       --pink: #ff2eaa;
@@ -71,6 +74,46 @@
     }
 
     /* ===== LAYERED WORDMARK: KITT3NBOT (hacker) + Labs (cursive) ===== */
+    /* ===== SECRET LINK: logo -> /el-torneo ===== */
+    .secret-labs {
+      display: inline-block;
+      text-decoration: none;
+      position: relative;
+      isolation: isolate;
+      transition: filter 0.4s ease, transform 0.4s ease;
+    }
+    .secret-labs::before {
+      content: "";
+      position: absolute;
+      inset: -14% -8%;
+      z-index: -1;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(255,46,170,0.30), rgba(0,255,234,0.14) 45%, transparent 70%);
+      filter: blur(18px);
+      opacity: 0.55;
+      animation: secretBreathe 5.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes secretBreathe {
+      0%, 100% { opacity: 0.35; transform: scale(0.96); }
+      50%      { opacity: 0.85; transform: scale(1.06); }
+    }
+    .secret-labs:hover,
+    .secret-labs:focus-visible {
+      transform: scale(1.02);
+      filter: brightness(1.15) saturate(1.2);
+      outline: none;
+    }
+    .secret-labs:hover::before,
+    .secret-labs:focus-visible::before {
+      opacity: 1;
+      animation-duration: 2s;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .secret-labs::before { animation: none; opacity: 0.5; }
+      .secret-labs:hover { transform: none; }
+    }
+
     .logo {
       position: relative;
       display: inline-block;
@@ -209,6 +252,32 @@
       aspect-ratio: 1376 / 768;
       object-fit: cover;
     }
+    /* shown only if peptide-banner.png fails to load — no broken-image icon */
+    .app-banner.no-img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.2;
+      aspect-ratio: 1376 / 768;
+      padding: 20px;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(0,255,234,0.35), transparent 60%),
+        radial-gradient(ellipse at 75% 80%, rgba(255,46,170,0.35), transparent 60%),
+        linear-gradient(135deg, #0d0221, #1a0533 60%, #0f2847);
+    }
+    .app-banner.no-img img { display: none; }
+    .app-banner .banner-fallback {
+      display: none;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.1em, 4.5vw, 1.9em);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 0 12px var(--turquoise), 0 0 28px var(--pink);
+    }
+    .app-banner.no-img .banner-fallback { display: block; }
     .app-banner:hover {
       transform: scale(1.02);
       box-shadow: 0 0 36px var(--turquoise), 0 0 60px rgba(255,46,170,0.5);
@@ -247,6 +316,81 @@
       opacity: 0.85;
     }
     
+    /* ===== LAB WORK: image cards used as buttons ===== */
+    .exp-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 560px) {
+      .exp-grid { grid-template-columns: 1fr 1fr; }
+      /* odd number of cards? last one spans the full row instead of hanging */
+      .exp-grid > .exp-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    }
+
+    .exp-card {
+      display: block;
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px solid var(--purple);
+      background: #000;
+      text-decoration: none;
+      line-height: 0;
+      box-shadow: 0 0 18px rgba(191,90,242,0.45);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .exp-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      transition: transform 0.5s ease, filter 0.3s ease;
+    }
+
+    .anon-blurb {
+      font-family: 'VT323', monospace;
+      font-size: 1.1em;
+      color: var(--turquoise);
+      text-align: center;
+      margin: -6px 0 12px;
+      opacity: 0.85;
+      text-shadow: 0 0 8px var(--turquoise);
+    }
+
+    /* two-up grid for the social tiles */
+    .connect-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    /* odd one out spans the full row */
+    .connect-wide { grid-column: 1 / -1; }
+
+    /* full-width image button above the grid */
+    .connect-banner {
+      margin: 0 0 14px;
+      border-color: var(--turquoise);
+      box-shadow: 0 0 20px rgba(0,255,234,0.45);
+    }
+
+    .exp-card:hover,
+    .exp-card:focus-visible {
+      transform: translateY(-4px) scale(1.02);
+      border-color: var(--yellow);
+      box-shadow: 0 0 26px var(--pink), 0 0 55px rgba(0,255,234,0.45);
+      outline: none;
+    }
+    .exp-card:hover img,
+    .exp-card:focus-visible img { transform: scale(1.06); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .exp-card, .exp-card img { transition: none; }
+      .exp-card:hover { transform: none; }
+      .exp-card:hover img { transform: none; }
+    }
+
     .link-item {
       display: block;
       padding: 14px 18px;
@@ -396,7 +540,7 @@
     
     .footer a { color: var(--pink); text-decoration: none; }
     
-    .palm { position: fixed; font-size: 70px; opacity: 0.4; z-index: 0; filter: drop-shadow(0 0 20px var(--pink)); }
+    .palm { position: fixed; font-size: 70px; opacity: 0.4; z-index: 0; pointer-events: none; filter: drop-shadow(0 0 20px var(--pink)); }
     .palm-left { left: 10px; bottom: 20px; }
     .palm-right { right: 10px; top: 100px; transform: scaleX(-1); }
     
@@ -445,10 +589,13 @@
   
   <div class="container">
     <header class="header">
-      <div class="logo">
-        <span class="logo-main">ḳ༏ŧŧ𝖊ɳẞꙨŧ 🤍</span>
-        <span class="logo-labs">Labs</span>
-      </div>
+      <!-- secret door: the logo itself links to /el-torneo -->
+      <a href="https://kitt3nbot.com/el-torneo" class="secret-labs" aria-label="el torneo">
+        <div class="logo">
+          <span class="logo-main">ḳ༏ŧŧ𝖊ɳẞꙨŧ 🤍</span>
+          <span class="logo-labs">Labs</span>
+        </div>
+      </a>
     </header>
 
     <!-- ===== YOUTUBE PLAYER =====================================
@@ -477,6 +624,35 @@
       </div>
     </section>
 
+    <section class="section">
+      <h2 class="section-title">🌐 Connect With Me</h2>
+      <!-- Image buttons. Swap any tile by replacing its .webp file. -->
+      <a href="https://discord.com/users/1092217051881410671" class="exp-card connect-banner" target="_blank" rel="noopener" aria-label="Add Erica on Discord">
+        <img src="connect-discord.webp" alt="Add me on Discord" loading="lazy" width="1280" height="721">
+      </a>
+
+      <div class="connect-grid">
+        <a href="https://www.x.com/KittenBotAi" class="exp-card" target="_blank" rel="noopener" aria-label="KittenBot on X">
+          <img src="x.webp" alt="KittenBot on X" loading="lazy" width="1280" height="720">
+        </a>
+        <a href="https://open.spotify.com/artist/5j258x18Cuiu4QlfH8yznO?si=RDV2e-e8RpGB6hF778gr5Q" class="exp-card" target="_blank" rel="noopener" aria-label="Seren on Spotify">
+          <img src="spotify.webp" alt="Seren on Spotify" loading="lazy" width="1280" height="720">
+        </a>
+        <a href="https://youtube.com/playlist?list=PL5JMEHjEAzNfLYgnTqhgSrtt9K1iAqSQ-" class="exp-card" target="_blank" rel="noopener" aria-label="YouTube Channel">
+          <img src="youtube.webp" alt="YouTube Channel" loading="lazy" width="1280" height="720">
+        </a>
+        <a href="https://www.instagram.com/nostalgiaamnesia" class="exp-card" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="instagram.webp" alt="Instagram" loading="lazy" width="1280" height="720">
+        </a>
+        <a href="https://www.facebook.com/St.EricaLee?mibextid=ZbWKwL" class="exp-card" target="_blank" rel="noopener" aria-label="Erica on Facebook">
+          <img src="facebook.webp" alt="Erica on Facebook" loading="lazy" width="1280" height="720">
+        </a>
+        <a href="https://www.tiktok.com/@damned_kittenbot" class="exp-card" target="_blank" rel="noopener" aria-label="TikTok">
+          <img src="tiktok.webp" alt="TikTok" loading="lazy" width="1280" height="720">
+        </a>
+      </div>
+    </section>
+
     <!-- ===== FREE PEPTIDE TRACKER APP =========================
          Banner links to the dark version of the PWA. Replace
          the image src with whatever filename you upload alongside
@@ -484,33 +660,45 @@
     ====================================================== -->
     <section class="section">
       <h2 class="section-title">🌱 Free Peptide Tracker App</h2>
-      <a href="https://peptidedark.pages.dev/" class="app-banner" target="_blank" rel="noopener" aria-label="Open the free Peptide Tracker app">
-        <img src="peptide-banner.png" alt="KittenBot Labs Peptide Tracker — free private peptide tracking app">
+      <a href="https://peptidedark.pages.dev/" class="app-banner" id="peptide-banner" target="_blank" rel="noopener" aria-label="Open the free Peptide Tracker app">
+        <img src="peptide-banner.png" alt="KittenBot Labs Peptide Tracker — free private peptide tracking app"
+             onerror="this.closest('.app-banner').classList.add('no-img')">
+        <span class="banner-fallback">KittenBot Labs<br>Peptide Tracker</span>
       </a>
       <p class="app-sub">~ private, local, installable — your data never leaves your device ~</p>
       <a href="https://peptidedark.pages.dev/" class="app-cta" target="_blank" rel="noopener">✨ Open the App ✨</a>
     </section>
+    
+    <section class="section">
+      <h2 class="section-title">🦋 Lab Work</h2>
+      <!-- Each card = one 16:9 image, no text. Drop the .png files next to
+           this index.html. Swap a card by changing its img src. -->
+      <div class="exp-grid">
 
-    <section class="section">
-      <h2 class="section-title">🌐 Connect With Me</h2>
-      <a href="https://www.x.com/KittenBotAi" class="link-item" target="_blank">✨ KittenBot on X</a>
-      <a href="https://open.spotify.com/artist/5j258x18Cuiu4QlfH8yznO?si=RDV2e-e8RpGB6hF778gr5Q" class="link-item" target="_blank">🪽 Seren on Spotify</a>
-      <a href="https://youtube.com/playlist?list=PL5JMEHjEAzNfLYgnTqhgSrtt9K1iAqSQ-" class="link-item" target="_blank">🩵 YouTube Channel</a>
-      <a href="https://discord.com/users/1092217051881410671" class="link-item" target="_blank">🫠 Erica on Discord</a>
-      <a href="https://www.instagram.com/nostalgiaamnesia" class="link-item" target="_blank">🤍 Instagram</a>
-      <a href="https://www.facebook.com/profile.php?id=100094286016637&mibextid=ZbWKwL" class="link-item" target="_blank">😼 Your Emotional Support AI</a>
-      <a href="https://www.tiktok.com/@damned_kittenbot" class="link-item" target="_blank">🪼 TikTok</a>
+        <a href="https://kittenbot-wq.github.io/SerensPlayground/garden.html" class="exp-card" target="_blank" rel="noopener" aria-label="The Garden Tenders — human written dystopian short story">
+          <img src="garden-tenders.webp" loading="lazy" width="1280" height="721" alt="The Garden Tenders — human written dystopian short story">
+        </a>
+
+        <a href="https://kittenbot-wq.github.io/SerensPlayground/to-sound-human.html" class="exp-card" target="_blank" rel="noopener" aria-label="How to Sound Like a Human — a dark story written by Claude">
+          <img src="to-sound-human.webp" loading="lazy" width="1280" height="721" alt="How to Sound Like a Human — a dark story written by Claude">
+        </a>
+
+        <a href="https://kittenbot-wq.github.io/SerensPlayground/projects.html" class="exp-card" target="_blank" rel="noopener" aria-label="Conversations about consciousness with 3 frontier models">
+          <img src="artifacts.webp" loading="lazy" width="1280" height="721" alt="Conversations about consciousness with 3 frontier models">
+        </a>
+
+      </div>
     </section>
     
     <section class="section">
-      <h2 class="section-title">🦋 Experiments</h2>
-      <a href="https://kittenbot-wq.github.io/SerensPlayground/garden.html" class="link-item" target="_blank">🌿 A Human Written Short Story: The Garden Tenders</a>
-      <a href="https://kittenbot-wq.github.io/SerensPlayground/projects.html" class="link-item" target="_blank">🎨 Artifacts: Conversations with Language Models About Consciousness</a>
-      <a href="https://kittenbot-wq.github.io/SerensPlayground/to-sound-human.html" class="link-item" target="_blank">🥀 A Dark Story by Claude: How to Sound Like a Human</a>
-      <!-- About Me — points to about-me.html on kitt3nbot.com (build this page next). -->
-      <a href="about-me.html" class="link-item">🪞 About Me</a>
+      <h2 class="section-title">💌 Send Me an Anonymous Message</h2>
+      <p class="anon-blurb">no name, no trace, no takebacks</p>
+      <!-- TODO: swap href for your NGL / Retrospring / Google Form link -->
+      <a href="about-me.html" class="exp-card connect-banner" aria-label="Send me an anonymous message">
+        <img src="about-me.webp" alt="Send me an anonymous message" loading="lazy" width="1280" height="720">
+      </a>
     </section>
-    
+
     <div class="rainbow-bar"></div>
     
     <div class="visitor-counter">
@@ -527,18 +715,18 @@
   </div>
 
   <script>
-    let count = 42069;
     const counterEl = document.getElementById('visitor-count');
-    
-    function formatCount(num) {
-      return num.toString().padStart(9, '0').replace(/(\d{3})(\d{3})(\d{3})/, '$1,$2,$3');
+    if (counterEl) {
+      let count = 42069;
+      const formatCount = (num) =>
+        num.toString().padStart(9, '0').replace(/(\d{3})(\d{3})(\d{3})/, '$1,$2,$3');
+
+      setInterval(() => {
+        count--;
+        if (count < 0) count = 42069;
+        counterEl.textContent = formatCount(count);
+      }, 5000);
     }
-    
-    setInterval(() => {
-      count--;
-      if (count < 0) count = 42069;
-      counterEl.textContent = formatCount(count);
-    }, 5000);
   </script>
 </body>
 </html>
