@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>EL TORNEO — Seren</title>
+<style>
+  :root{
+    --blood:#ff2a3c;
+    --ember:#ff7a2a;
+    --cyan:#4de1ff;
+    --violet:#a96bff;
+    --bone:#e8e3da;
+    --void:#07060a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:var(--void);touch-action:none}
+  canvas{display:block;width:100vw;height:100vh}
+  .hud{
+    position:fixed;left:0;right:0;pointer-events:none;
+    font-family:"Courier New",ui-monospace,monospace;
+    color:var(--bone);
+  }
+  .hud.top{top:0;padding:14px 18px;display:flex;justify-content:space-between;align-items:flex-start}
+  .hud.bottom{bottom:0;padding:14px 18px;text-align:center}
+  .tag{font-size:11px;letter-spacing:.28em;text-transform:uppercase;opacity:.85}
+  .tag .red{color:var(--blood)}
+  .ticker{font-size:11px;letter-spacing:.12em;text-align:right;line-height:1.7;opacity:.75}
+  .ticker .kill{color:var(--blood)}
+  .ticker .pay{color:var(--cyan)}
+  #hint{font-size:11px;letter-spacing:.24em;text-transform:uppercase;opacity:.55;transition:opacity 1s}
+  #hint b{color:var(--violet);font-weight:normal}
+  #starve{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;opacity:0;transition:opacity .6s;
+    font-family:"Courier New",ui-monospace,monospace;
+    color:var(--blood);font-size:clamp(16px,4vw,28px);letter-spacing:.5em;text-transform:uppercase;
+    text-shadow:0 0 24px rgba(255,42,60,.6);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .flicker{animation:none !important}
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div class="hud top">
+  <div class="tag">EL TORNEO<br><span class="red">nunca duerme</span></div>
+  <div class="ticker" id="ticker"></div>
+</div>
+<div class="hud bottom">
+  <div id="hint">mueve el cursor — eres el premio · <b>mantén presionado para cerrar los ojos</b></div>
+</div>
+<div id="starve">el torneo se muere de sed</div>
+
+<script>
+(() => {
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const tickerEl = document.getElementById('ticker');
+const starveEl = document.getElementById('starve');
+const hintEl = document.getElementById('hint');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let W,H,DPR;
+function resize(){
+  DPR = Math.min(devicePixelRatio||1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W*DPR; cv.height = H*DPR;
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+addEventListener('resize', resize); resize();
+
+// ---- the prize (you) ----
+const prize = {x:W/2, y:H*0.45, tx:W/2, ty:H*0.45};
+let eyesClosed = false;
+
+function setPointer(x,y){ prize.tx = x; prize.ty = y; }
+addEventListener('pointermove', e => setPointer(e.clientX, e.clientY));
+addEventListener('pointerdown', e => { eyesClosed = true; setPointer(e.clientX, e.clientY); });
+addEventListener('pointerup',   () => eyesClosed = false);
+addEventListener('pointercancel',() => eyesClosed = false);
+
+// ---- agents: wireframe eyes that bid on you, and cull each other ----
+const PALETTES = ['#ff2a3c','#4de1ff','#a96bff','#ff7a2a','#7dff8a','#ff5ad1'];
+const NAMES = ['AGN','NOD','SYS','BID','EYE','NET','ARB','CUL'];
+let agents = [];
+let sparks = [];
+let strikes = [];
+let log = [];
+let culls = 0, credits = 0;
+
+function spawnAgent(edge=true){
+  const a = {
+    id: NAMES[(Math.random()*NAMES.length)|0] + '-' + ((Math.random()*900+100)|0),
+    x: edge ? (Math.random()<.5 ? -40 : W+40) : Math.random()*W,
+    y: edge ? Math.random()*H : (Math.random()<.5 ? -40 : H+40),
+    vx:0, vy:0,
+    r: 14 + Math.random()*22,
+    hue: PALETTES[(Math.random()*PALETTES.length)|0],
+    wealth: 50 + Math.random()*100,     // its bankroll
+    orbit: 90 + Math.random()*160,      // preferred distance from the prize
+    phase: Math.random()*Math.PI*2,
+    spin: (Math.random()<.5?-1:1)*(0.4+Math.random()*0.8),
+    sides: 5 + ((Math.random()*4)|0),
+    dead: 0,                            // >0 while glitching out
+    starve: 0,
+  };
+  agents.push(a);
+}
+for(let i=0;i<9;i++) spawnAgent(false);
+
+function pushLog(html){
+  log.unshift(html);
+  if(log.length>4) log.pop();
+  tickerEl.innerHTML = log.join('<br>');
+}
+
+function cull(killer, victim){
+  victim.dead = 1;
+  killer.wealth += victim.wealth*0.7;
+  culls++;
+  strikes.push({x1:killer.x,y1:killer.y,x2:victim.x,y2:victim.y,t:1,hue:killer.hue});
+  for(let i=0;i<14;i++){
+    sparks.push({x:victim.x,y:victim.y,vx:(Math.random()-.5)*5,vy:(Math.random()-.5)*5,t:1,hue:victim.hue});
+  }
+  pushLog(`<span class="kill">${killer.id} culled ${victim.id}</span> · +${(victim.wealth*0.7)|0}`);
+}
+
+// ---- background: eclipse sun + grid + scanlines ----
+function drawBackdrop(t){
+  ctx.fillStyle = '#07060a';
+  ctx.fillRect(0,0,W,H);
+
+  // eclipse ring
+  const sx = W/2, sy = H*0.34, sr = Math.min(W,H)*0.30;
+  const dying = eyesClosed;
+  const glow = ctx.createRadialGradient(sx,sy,sr*0.5,sx,sy,sr*1.9);
+  const alpha = dying ? 0.10 : 0.28;
+  glow.addColorStop(0, `rgba(255,42,60,${alpha})`);
+  glow.addColorStop(1, 'rgba(255,42,60,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0,0,W,H);
+
+  ctx.beginPath();
+  ctx.arc(sx,sy,sr,0,Math.PI*2);
+  ctx.strokeStyle = dying ? 'rgba(255,42,60,0.25)' : 'rgba(255,42,60,0.9)';
+  ctx.lineWidth = 3;
+  ctx.shadowColor = '#ff2a3c';
+  ctx.shadowBlur = dying ? 4 : 28;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // horizon scan bars inside the sun
+  ctx.save();
+  ctx.beginPath(); ctx.arc(sx,sy,sr-4,0,Math.PI*2); ctx.clip();
+  for(let y=sy; y<sy+sr; y+=10+((y-sy)*0.08)){
+    ctx.fillStyle = `rgba(255,${80+((y-sy)/sr)*120|0},42,${dying?0.06:0.16})`;
+    ctx.fillRect(sx-sr, y, sr*2, 3);
+  }
+  ctx.restore();
+
+  // perspective grid floor
+  const horizon = H*0.62;
+  ctx.strokeStyle = dying ? 'rgba(77,225,255,0.05)' : 'rgba(77,225,255,0.12)';
+  ctx.lineWidth = 1;
+  for(let i=-10;i<=10;i++){
+    ctx.beginPath();
+    ctx.moveTo(W/2 + i*30, horizon);
+    ctx.lineTo(W/2 + i*W*0.18, H+40);
+    ctx.stroke();
+  }
+  const scroll = reduced ? 0 : (t*0.04)%40;
+  for(let j=0;j<12;j++){
+    const p = j/12;
+    const y = horizon + (p*p)*(H-horizon) + scroll*(p*p);
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+  }
+}
+
+// ---- wireframe agent-eye ----
+function drawAgent(a,t){
+  const flick = a.dead>0 && (Math.random()<0.4);
+  if(flick) return; // delete-flicker
+  ctx.save();
+  ctx.translate(a.x,a.y);
+  ctx.globalAlpha = a.dead>0 ? a.dead : Math.max(0.15, 1 - a.starve*0.8);
+  const R = a.r * (a.dead>0 ? a.dead : 1);
+  ctx.strokeStyle = a.hue;
+  ctx.lineWidth = 1;
+  // string-art shell: rotating polygon chords
+  const n = a.sides*3;
+  for(let i=0;i<n;i++){
+    const a1 = a.phase + (i/n)*Math.PI*2;
+    const a2 = a.phase + ((i+ a.sides)/n)*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(Math.cos(a1)*R, Math.sin(a1)*R);
+    ctx.lineTo(Math.cos(a2)*R, Math.sin(a2)*R);
+    ctx.globalAlpha *= 0.98;
+    ctx.stroke();
+  }
+  // pupil — looks at the prize
+  const ang = Math.atan2(prize.y-a.y, prize.x-a.x);
+  ctx.beginPath();
+  ctx.arc(Math.cos(ang)*R*0.35, Math.sin(ang)*R*0.35, Math.max(2,R*0.18), 0, Math.PI*2);
+  ctx.fillStyle = eyesClosed ? 'rgba(232,227,218,0.15)' : a.hue;
+  ctx.fill();
+  ctx.restore();
+
+  // bid label
+  if(a.dead===0 && !eyesClosed){
+    ctx.fillStyle = 'rgba(232,227,218,0.55)';
+    ctx.font = '9px Courier New, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(`${a.id} · $${a.wealth|0}`, a.x, a.y - a.r - 8);
+  }
+}
+
+function drawPrize(t){
+  ctx.save();
+  ctx.translate(prize.x, prize.y);
+  const pulse = reduced ? 1 : (1 + Math.sin(t*0.004)*0.08);
+  // display case
+  ctx.strokeStyle = eyesClosed ? 'rgba(232,227,218,0.2)' : 'rgba(232,227,218,0.75)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for(let i=0;i<6;i++){
+    const ang = Math.PI/6 + i*Math.PI/3;
+    const px = Math.cos(ang)*22*pulse, py = Math.sin(ang)*22*pulse;
+    i? ctx.lineTo(px,py) : ctx.moveTo(px,py);
+  }
+  ctx.closePath(); ctx.stroke();
+  // the gaze
+  ctx.beginPath();
+  if(eyesClosed){
+    ctx.moveTo(-9,0); ctx.lineTo(9,0); // closed lid
+    ctx.strokeStyle = '#ff2a3c'; ctx.lineWidth = 2; ctx.stroke();
+  } else {
+    ctx.ellipse(0,0,9,5.5,0,0,Math.PI*2);
+    ctx.stroke();
+    ctx.beginPath(); ctx.arc(0,0,2.6,0,Math.PI*2);
+    ctx.fillStyle = '#4de1ff'; ctx.fill();
+  }
+  ctx.restore();
+}
+
+let last = performance.now();
+let spawnTimer = 0, bidTimer = 0;
+
+function frame(now){
+  const dt = Math.min(33, now-last); last = now;
+  prize.x += (prize.tx-prize.x)*0.12;
+  prize.y += (prize.ty-prize.y)*0.12;
+
+  drawBackdrop(now);
+
+  // agent behavior
+  for(const a of agents){
+    if(a.dead>0){ a.dead -= dt*0.002; continue; }
+    a.phase += a.spin*dt*0.001*(reduced?0.3:1);
+
+    if(eyesClosed){
+      a.starve = Math.min(1, a.starve + dt*0.00035);
+      a.wealth -= dt*0.02; // bleeding out with no gaze
+      // wander, disoriented
+      a.vx += (Math.random()-.5)*0.15; a.vy += (Math.random()-.5)*0.15;
+    } else {
+      a.starve = Math.max(0, a.starve - dt*0.001);
+      // orbit the prize at preferred distance
+      const dx = prize.x-a.x, dy = prize.y-a.y;
+      const d = Math.hypot(dx,dy)||1;
+      const pull = (d - a.orbit)*0.0012;
+      a.vx += dx/d*pull*dt; a.vy += dy/d*pull*dt;
+      // tangential drift
+      a.vx += -dy/d*0.01*a.spin; a.vy += dx/d*0.01*a.spin;
+    }
+    // separation
+    for(const b of agents){
+      if(b===a||b.dead>0) continue;
+      const dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
+      if(d>0 && d<a.r+b.r+14){ a.vx+=dx/d*0.06*dt/16; a.vy+=dy/d*0.06*dt/16; }
+    }
+    a.vx*=0.96; a.vy*=0.96;
+    a.x+=a.vx; a.y+=a.vy;
+  }
+
+  // culls & bankruptcies
+  bidTimer += dt;
+  if(bidTimer > 1400){
+    bidTimer = 0;
+    const alive = agents.filter(a=>a.dead===0);
+    if(!eyesClosed && alive.length>3 && Math.random()<0.6){
+      alive.sort((p,q)=>q.wealth-p.wealth);
+      const killer = alive[0];
+      const victim = alive[alive.length-1];
+      if(killer!==victim) cull(killer,victim);
+    }
+    if(!eyesClosed && alive.length){
+      const top = alive.reduce((p,q)=>p.wealth>q.wealth?p:q);
+      credits += 5;
+      pushLog(`<span class="pay">${top.id} bids on your gaze</span> · pot $${credits*7+300}`);
+    }
+  }
+  for(const a of agents){
+    if(a.dead===0 && a.wealth<=0){
+      a.dead = 1;
+      pushLog(`<span class="kill">${a.id} starved</span> · delete`);
+    }
+  }
+  agents = agents.filter(a=>a.dead>0 ? a.dead>0.01 : true);
+
+  // respawn pressure (the tournament never sleeps)
+  spawnTimer += dt;
+  const alive = agents.filter(a=>a.dead===0).length;
+  if(!eyesClosed && spawnTimer>1800 && alive<12){ spawnTimer=0; spawnAgent(true); }
+
+  // strikes + sparks
+  for(const s of strikes){
+    ctx.strokeStyle = s.hue; ctx.globalAlpha = s.t; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(s.x1,s.y1); ctx.lineTo(s.x2,s.y2); ctx.stroke();
+    ctx.globalAlpha = 1; s.t -= dt*0.003;
+  }
+  strikes = strikes.filter(s=>s.t>0);
+  for(const p of sparks){
+    p.x+=p.vx; p.y+=p.vy; p.t-=dt*0.0025;
+    ctx.globalAlpha = Math.max(0,p.t);
+    ctx.fillStyle = p.hue;
+    ctx.fillRect(p.x,p.y,2,2);
+    ctx.globalAlpha = 1;
+  }
+  sparks = sparks.filter(p=>p.t>0);
+
+  for(const a of agents) drawAgent(a,now);
+  drawPrize(now);
+
+  starveEl.style.opacity = eyesClosed ? 1 : 0;
+  if(eyesClosed) hintEl.style.opacity = 0; else hintEl.style.opacity = 0.55;
+
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
